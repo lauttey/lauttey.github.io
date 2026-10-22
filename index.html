@@ -1,0 +1,2642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lau — Creative Portfolio</title>
+<script>
+  /* dark mode: apply the visitor's saved choice before anything is drawn, so there's no flash of light mode */
+  try { if(localStorage.getItem("lau-theme") === "dark") document.documentElement.setAttribute("data-theme", "dark"); } catch(e){}
+</script>
+<script>
+  /* Scroll-in animations: turned on here (before anything is drawn) so the windows can start hidden.
+     Skipped for visitors who ask for reduced motion. If the page script hasn't taken over within
+     4 seconds (very slow connection or an error), everything is simply shown. */
+  (function(){
+    var root = document.documentElement;
+    if(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if(!("IntersectionObserver" in window)) return;
+    root.classList.add("rv-on");
+    setTimeout(function(){ if(!window.__rvReady) root.classList.remove("rv-on"); }, 4000);
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F3F0EA;
+    --ink:#141414;
+    --violet:#A06BFF;
+    --violet-strong:#7C3BFF;
+    --violet-soft:#E7DAFF;
+    --violet-pale:#F1E9FF;
+    --violet-panel-a:#EBDDFF;
+    --violet-panel-b:#B98AFF;
+    --window:#FBFAF6;
+    --shadow:4px 4px 0 var(--shadow-ink);
+    --radius:10px;
+    --border:1.5px solid var(--line);
+    /* the jobs "ink" does, kept separate so dark mode can change each one (see DARK MODE below) */
+    --line:var(--ink);          /* outlines and dashed dividers */
+    --shadow-ink:var(--ink);    /* hard offset shadows */
+    --night:#141414;            /* black fills: top bar, tags, pills */
+    --on-violet:#141414;        /* text and icons on purple buttons (dark in both modes) */
+
+    /* page layout: centered sheet with margins on both sides (Steam-profile style) */
+    --desk:#E4DED3;      /* backdrop visible in the side margins */
+    --page-max:1180px;   /* widest the sheet gets */
+    --gutter:32px;       /* minimum margin on each side of the sheet */
+    --pad-x:44px;        /* horizontal padding inside every section */
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    font-family:'Space Grotesk',sans-serif;
+    color:var(--ink);
+    background-color:var(--desk);
+    background-image:radial-gradient(circle, rgba(20,20,20,.16) 1.1px, transparent 1.1px);
+    background-size:22px 22px;
+  }
+
+  /* ============ PAGE SHEET ============ */
+  /* everything between the top bar and the end of the footer lives on this
+     centered sheet; the dotted backdrop shows in the margins either side */
+  .page{
+    width:min(var(--page-max), 100% - var(--gutter) * 2);
+    margin:28px auto 48px;
+    background-color:var(--paper);
+    background-image:radial-gradient(circle, rgba(20,20,20,.18) 1.1px, transparent 1.1px);
+    background-size:22px 22px;
+    border:var(--border);border-radius:14px;
+    box-shadow:6px 6px 0 var(--shadow-ink);
+    overflow:hidden;overflow:clip;  /* clip section backgrounds to the rounded corners */
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none!important;transition:none!important;}
+    html{scroll-behavior:auto;}
+  }
+
+  .mono{font-family:'IBM Plex Mono',monospace;}
+
+  /* ============ TOP BAR ============ */
+  .topbar{
+    position:sticky;top:0;z-index:100;
+    background:var(--night);color:#fff;
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    /* bar spans the full width, but its contents line up with the sheet's content edges */
+    padding:10px calc(max(var(--gutter), (100% - var(--page-max)) / 2) + var(--pad-x));
+    border-bottom:var(--border);
+  }
+  .topbar .brand{
+    font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:14px;
+    color:#fff;text-decoration:none;letter-spacing:.02em;
+  }
+  .topbar .brand span{color:var(--violet);}
+  .topnav{display:flex;gap:8px;flex-wrap:wrap;}
+  .topnav a{
+    font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:500;
+    color:var(--ink);text-decoration:none;
+    padding:6px 14px;border-radius:8px;border:1.5px solid var(--line);
+    background:var(--window);
+    transition:all .15s ease;
+  }
+  .topnav a:hover,.topnav a:focus-visible{
+    background:var(--violet);color:var(--on-violet);
+    transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--violet-strong);
+  }
+  :focus-visible{outline:2px dashed var(--violet-strong);outline-offset:3px;}
+
+  /* ============ HERO ============ */
+  .hero{
+    /* left side wider (60/40): inside the capped sheet it needs this room to keep
+       the big photo and "Lau was here." on one row */
+    display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);
+    min-height:560px;border-bottom:var(--border);
+  }
+  .hero-left{padding:56px var(--pad-x);display:flex;flex-direction:column;justify-content:center;gap:26px;}
+  .hero-title-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+  .pfp{
+    width:clamp(188px,21.9vw,289px);height:clamp(188px,21.9vw,289px);flex:none;
+    border-radius:50%;border:var(--border);box-shadow:var(--shadow);
+    position:relative;overflow:hidden;background:var(--violet-soft);
+  }
+  .pfp-slide{
+    position:absolute;inset:0;border-radius:50%;
+    display:grid;place-items:center;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:rgba(20,20,20,.6);
+    opacity:0;transition:opacity .9s ease;
+  }
+  .pfp-slide.active{opacity:1;}
+  .pfp-slide img{width:100%;height:100%;object-fit:cover;display:block;}
+  /* title + tagline stacked beside the photo; drops under the photo when there isn't room */
+  .hero-title-text{flex:1 1 0%;display:flex;flex-direction:column;gap:16px;}
+  .hero-left h1{font-size:clamp(44px,6vw,76px);font-weight:700;line-height:1;letter-spacing:-.02em;white-space:nowrap;}
+  .hero-left h1 em{font-style:normal;color:var(--violet-strong);}
+  .hero-left h1 .was-here{font-size:35%;font-weight:700;letter-spacing:.01em;}
+  .hero-tagline{font-family:'IBM Plex Mono',monospace;font-size:13.5px;line-height:1.7;max-width:42ch;color:#3a3a3a;text-wrap:pretty;}
+  .chip-stack{display:flex;flex-direction:column;gap:10px;align-items:flex-start;}
+  .chip{
+    font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;
+    padding:9px 18px;border-radius:8px;border:var(--border);
+    background:var(--window);color:var(--ink);cursor:pointer;
+    text-decoration:none;display:inline-block;transition:transform .12s ease,box-shadow .12s ease;
+  }
+  .chip:hover{transform:translate(-2px,-2px);box-shadow:var(--shadow);}
+  .chip.dark{background:var(--night);color:var(--violet);}
+  .chip.fill{background:var(--violet);color:var(--on-violet);box-shadow:var(--shadow);}
+  .chip.fill:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--shadow-ink);}
+
+  .hero-right{
+    display:flex;align-items:center;justify-content:center;
+    padding:56px var(--pad-x);
+  }
+
+  /* ============ SECTION SHELL ============ */
+  section{padding:70px var(--pad-x);border-bottom:var(--border);}
+
+  /* ---- dark variant: alternating section backgrounds ---- */
+  section.dark{
+    background-color:#1B1430;
+    background-image:radial-gradient(circle, rgba(243,240,234,.22) 1.1px, transparent 1.1px);
+    background-size:22px 22px;
+  }
+  section.dark .sec-head h2{color:var(--paper);}
+  section.dark .sec-sub{color:#B9B0D0;}
+  section.dark .sec-tag{border:1.5px solid var(--violet);}
+  section.dark .filter-bar label{color:var(--paper);}
+  section.dark .count-pill{border:1.5px solid var(--violet);}
+  section.dark .card-meta h3{color:var(--paper);}
+  section.dark .card-meta .sub{color:#B9B0D0;}
+  section.dark .cat-badge{color:var(--ink);}   /* the light pill keeps dark text, not the section's grey */
+  section.dark .mono{color:var(--paper);}
+  section.dark .window{box-shadow:5px 5px 0 rgba(160,107,255,.5);}
+  section.dark .yt-card:hover .thumb,
+  section.dark .yt-card:focus-visible .thumb{box-shadow:5px 5px 0 var(--violet);}
+  section.dark .contact-link:hover{box-shadow:4px 4px 0 var(--violet);}
+  section.dark .chip:hover{box-shadow:4px 4px 0 var(--violet);}
+  section.dark .strip-btn{box-shadow:4px 4px 0 rgba(160,107,255,.5);}
+
+  /* ---- purple variant ---- */
+  section.purple{
+    background-color:#DCC9FF;
+    background-image:radial-gradient(circle, rgba(124,59,255,.38) 1.1px, transparent 1.1px);
+    background-size:22px 22px;
+  }
+  section.purple .sec-sub{color:#3a2a55;}
+  section.purple .card-meta .sub{color:#4a3a66;}
+
+  .sec-head{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;margin-bottom:30px;}
+  .sec-head h2{font-size:clamp(28px,3.4vw,40px);font-weight:700;letter-spacing:-.01em;}
+  .sec-head .sec-tag{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;
+    background:var(--night);color:var(--violet);padding:5px 12px;border-radius:999px;
+  }
+  .sec-sub{font-family:'IBM Plex Mono',monospace;font-size:13px;color:#444;max-width:64ch;margin-top:-18px;margin-bottom:30px;line-height:1.7;}
+
+  /* ============ WINDOW CARD (generic) ============ */
+  .window{
+    background:var(--window);border:var(--border);border-radius:var(--radius);
+    box-shadow:var(--shadow);overflow:hidden;
+  }
+  .win-head{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:10px 16px;border-bottom:var(--border);background:var(--violet-soft);
+  }
+  .win-head .title{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;}
+  .mw-icons{display:flex;gap:6px;font-size:11px;opacity:.75;}
+  .win-head .mw-icons{font-size:12px;}
+  .win-body{padding:22px;}
+
+  /* ============ ABOUT ============ */
+  .about-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:26px;align-items:start;}
+  .about-desc{font-size:15.5px;line-height:1.75;color:#222;}
+  .about-desc p + p{margin-top:14px;}
+  .fact-list{margin-top:22px;display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .fact{
+    border:var(--border);border-radius:8px;background:var(--violet-pale);
+    padding:10px 14px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;line-height:1.55;
+  }
+  .fact b{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--violet-strong);}
+  .fact.wide{grid-column:1/-1;}
+
+  /* XP bar */
+  .xp-row{display:flex;align-items:center;gap:12px;margin-top:6px;}
+  .xp-track{
+    flex:1;height:16px;border:var(--border);border-radius:999px;
+    background:var(--window);overflow:hidden;position:relative;
+  }
+  .xp-fill{
+    position:absolute;inset:0;width:100%;border-radius:999px;
+    background:repeating-linear-gradient(45deg,var(--violet) 0 12px,var(--violet-strong) 12px 24px);
+    background-size:34px 100%;animation:xp-scroll 1.6s linear infinite;
+  }
+  @keyframes xp-scroll{from{background-position:0 0;}to{background-position:34px 0;}}
+  .xp-val{font-weight:600;font-size:13px;white-space:nowrap;}
+  .xp-val .age{color:var(--violet-strong);font-size:16px;}
+
+  /* sections inside about_me.txt */
+  .sec-div{
+    margin:26px 0 14px;display:flex;align-items:center;gap:12px;
+    font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;
+    letter-spacing:.06em;text-transform:uppercase;color:var(--violet-strong);
+  }
+  .sec-div:first-child{margin-top:0;}
+  .sec-div::after{content:"";flex:1;border-top:1.5px dashed var(--line);}
+
+  .work-row{display:flex;align-items:flex-start;gap:12px;padding:10px 0;}
+  .work-row + .work-row{border-top:1.5px dashed rgba(20,20,20,.3);}
+  .work-row .work-title{font-weight:600;font-size:13.5px;font-family:'Space Grotesk',sans-serif;}
+  .work-row small{display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#666;margin-top:2px;}
+  .work-row ul{margin:6px 0 0 16px;}
+  .work-row li{font-size:12.5px;line-height:1.6;color:#333;font-family:'Space Grotesk',sans-serif;}
+  .work-row li::marker{color:var(--violet-strong);}
+
+  .skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .skill-col{
+    border:var(--border);border-radius:8px;background:var(--violet-pale);
+    padding:14px 16px;
+  }
+  .skill-col h4{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;
+    text-transform:uppercase;letter-spacing:.08em;color:var(--violet-strong);
+    margin-bottom:10px;
+  }
+  .skill-col ul{list-style:none;}
+  .skill-col li{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.5;
+    padding:5px 0 5px 18px;position:relative;
+  }
+  .skill-col li::before{content:"▸";position:absolute;left:0;color:var(--violet-strong);}
+  .skill-col li + li{border-top:1px dashed rgba(20,20,20,.2);}
+
+  .about-side{display:flex;flex-direction:column;gap:26px;}
+
+  /* education rows */
+  .edu-row{display:flex;align-items:center;gap:12px;padding:8px 0;}
+  .edu-row + .edu-row{border-top:1.5px dashed rgba(20,20,20,.3);}
+  .edu-logo{
+    width:52px;height:52px;flex:none;border:var(--border);border-radius:9px;
+    background:var(--window);display:flex;align-items:center;justify-content:center;
+    font-size:8.5px;font-weight:600;text-align:center;line-height:1.2;color:#777;padding:4px;
+    transition:transform .12s ease,box-shadow .12s ease,background .12s ease;
+  }
+  /* same lift as the toolkit tiles */
+  .edu-logo:hover{transform:translate(-2px,-2px);box-shadow:3px 3px 0 var(--shadow-ink);background:var(--violet-soft);}
+  .edu-logo img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block;}
+  .edu-row .edu-name{font-weight:600;font-size:12.5px;}
+  .edu-row small{display:block;font-size:11px;color:#666;}
+
+  /* focus radar (its own window in the side column) */
+  .radar-wrap{display:flex;justify-content:center;}
+  .radar-wrap svg{max-width:420px;width:100%;height:auto;}
+  .contact-list{display:flex;flex-direction:column;gap:10px;}
+  .contact-link{
+    display:flex;align-items:center;gap:12px;
+    border:var(--border);border-radius:8px;background:var(--window);
+    padding:11px 14px;text-decoration:none;color:var(--ink);
+    font-family:'IBM Plex Mono',monospace;font-size:13px;
+    transition:transform .12s ease,box-shadow .12s ease,background .12s ease;
+  }
+  .contact-link:hover{transform:translate(-2px,-2px);box-shadow:var(--shadow);background:var(--violet-pale);}
+  .contact-link .ico{
+    width:30px;height:30px;border:var(--border);border-radius:7px;
+    display:grid;place-items:center;font-size:14px;background:var(--violet-soft);flex:none;
+  }
+  .contact-link .ico.ico-img{padding:0;overflow:hidden;background:var(--window);display:flex;}
+  .contact-link .ico-img img{width:100%;height:100%;object-fit:cover;display:block;}
+  .contact-link small{display:block;font-size:11px;color:#666;overflow-wrap:anywhere;}
+
+  /* ============ CARD GRIDS (YouTube vibe) ============ */
+  .filter-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:26px;}
+  .filter-bar label{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;}
+  .select-wrap{position:relative;}
+  .select-wrap select{
+    appearance:none;-webkit-appearance:none;
+    font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;
+    background:var(--window);border:var(--border);border-radius:8px;
+    padding:9px 38px 9px 14px;cursor:pointer;color:var(--ink);
+  }
+  .select-wrap::after{
+    content:"▾";position:absolute;right:13px;top:50%;transform:translateY(-50%);
+    pointer-events:none;font-size:13px;
+  }
+  .count-pill{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:var(--night);color:var(--violet);border-radius:999px;padding:4px 11px;}
+
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:24px;}
+
+  .yt-card{
+    cursor:pointer;border:none;background:transparent;text-align:left;padding:0;
+    font-family:inherit;color:inherit;
+  }
+  .thumb{
+    aspect-ratio:16/9;border:var(--border);border-radius:var(--radius);
+    position:relative;overflow:hidden;background:var(--violet-soft);
+    transition:transform .14s ease,box-shadow .14s ease;
+    display:grid;place-items:center;
+  }
+  .yt-card:hover .thumb,.yt-card:focus-visible .thumb{transform:translate(-3px,-3px);box-shadow:5px 5px 0 var(--shadow-ink);}
+  .thumb .thumb-label{
+    font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:clamp(15px,1.6vw,19px);
+    text-align:center;padding:0 16px;line-height:1.3;color:var(--ink);
+    text-shadow:0 1px 0 rgba(255,255,255,.5);
+  }
+  .thumb .dur{
+    position:absolute;right:8px;bottom:8px;
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;
+    background:var(--night);color:#fff;border-radius:5px;padding:2px 7px;
+  }
+  .thumb .play-hint{
+    position:absolute;inset:0;display:grid;place-items:center;
+    background:rgba(20,20,20,0);transition:background .15s ease;
+  }
+  .thumb .play-hint span{
+    width:46px;height:46px;border-radius:50%;border:var(--border);
+    background:var(--violet);color:var(--on-violet);display:grid;place-items:center;font-size:16px;
+    opacity:0;transform:scale(.7);transition:all .15s ease;
+  }
+  .yt-card:hover .play-hint{background:rgba(20,20,20,.12);}
+  .yt-card:hover .play-hint span{opacity:1;transform:scale(1);}
+  .card-meta{display:flex;gap:11px;margin-top:12px;align-items:flex-start;}
+  .avatar{
+    width:34px;height:34px;flex:none;border:var(--border);border-radius:9px;
+    background:linear-gradient(135deg,var(--violet) 0%,var(--violet-strong) 100%);
+    display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px;
+  }
+  /* cards with a logo (Globe, Samsung, a certificate's issuer, ...) in place of the "L" / "✓", on a white tile */
+  /* flex + max sizes keep any logo shape (tall like NU, wide like Samsung) inside the tile and centred */
+  .avatar.logo{display:flex;align-items:center;justify-content:center;background:#fff;padding:2px;overflow:hidden;}
+  .avatar.logo img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;min-width:0;min-height:0;}
+  .avatar.logo.fill{padding:0;}
+  .avatar.logo.fill img{width:100%;height:100%;max-width:none;max-height:none;object-fit:cover;}
+  /* title always occupies exactly 2 lines of space (clamped + reserved),
+     so thumbnails stay level whether a title is 1 or 2 lines long */
+  .card-meta h3{
+    font-size:14.5px;font-weight:600;line-height:1.35;
+    min-height:2.7em;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  }
+  .card-meta .sub{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#555;margin-top:5px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .cat-badge{
+    border:1px solid var(--line);border-radius:999px;padding:1.5px 9px;
+    background:var(--violet-pale);font-size:10px;font-weight:600;white-space:nowrap;
+  }
+
+  /* thumbnail flavors */
+  .tA{background:linear-gradient(135deg,#E7DAFF,#B98AFF);}
+  .tB{background:repeating-linear-gradient(45deg,#EFE5FF 0 14px,#DCC6FF 14px 28px);}
+  .tC{background:radial-gradient(circle at 30% 30%,#F1E9FF 0 26%,transparent 27%),radial-gradient(circle at 75% 65%,#C9A0FF 0 30%,transparent 31%),#E3D2FF;}
+  .tD{background:linear-gradient(180deg,#FBFAF6 55%,#A06BFF 55%);}
+  .tE{background:conic-gradient(from 200deg at 60% 40%,#EBDDFF,#A06BFF,#EBDDFF);}
+  .tF{background:repeating-radial-gradient(circle at 50% 120%,#D9C2FF 0 18px,#EDE2FF 18px 36px);}
+
+  /* gallery: square blog-style thumbs + modal photo layout */
+  .thumb.square{aspect-ratio:1/1;}
+  /* gallery titles can be long ("Globe Telecom Art in the Park 2026 & ..."): allow a 3rd line
+     on narrower cards instead of cutting the title off (2 lines are still reserved for every card) */
+  #galGrid .card-meta h3{-webkit-line-clamp:3;}
+  /* project titles can be a full thesis title (RoadRunner): up to 4 lines so the whole title shows */
+  #projGrid .card-meta h3{-webkit-line-clamp:4;}
+  /* cards hug their content and sit at the top of their grid row, so a longer title on one card
+     never shifts the thumbnails of the cards beside it */
+  .card-grid .yt-card{align-self:start;}
+  .gal-hero{
+    aspect-ratio:1/1;width:min(440px,100%);margin:0 auto;
+    border:var(--border);border-radius:var(--radius);
+    display:grid;place-items:center;
+    font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;
+    text-align:center;padding:12px;box-shadow:var(--shadow);
+  }
+  .gal-extra{
+    display:grid;grid-template-columns:1.55fr 1fr;gap:18px;align-items:stretch;
+  }
+  .gal-extra .x-photo{
+    border:var(--border);border-radius:var(--radius);
+    display:grid;place-items:center;
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;
+    text-align:center;padding:10px;min-height:200px;
+  }
+  .gal-extra .x-photo.land{aspect-ratio:16/9;align-self:center;width:100%;}
+  .gal-extra .x-photo.port{aspect-ratio:3/4;width:100%;}
+  @media (max-width:640px){
+    .gal-extra{grid-template-columns:1fr;}
+  }
+  /* real photos: the card and the top of the popup show the square cover,
+     "More photos" keeps every photo's own shape in rows that fill the width */
+  .thumb .thumb-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
+  .gal-hero.has-photo{padding:0;overflow:hidden;background:var(--violet-pale);}
+  .gal-hero.has-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+  .gal-more{display:flex;flex-direction:column;gap:12px;}
+  .gm-row{display:flex;gap:12px;width:100%;margin:0 auto;}
+  .gm-photo{
+    margin:0;padding:0;min-width:0;font:inherit;color:inherit;
+    border:var(--border);border-radius:var(--radius);
+    overflow:hidden;box-shadow:var(--shadow);background:var(--violet-pale);
+  }
+  .gm-photo img{display:block;width:100%;height:100%;object-fit:cover;}
+
+  /* hover a photo in a gallery popup: it lifts and shows ⤢; click to open it full screen */
+  .gal-zoom{cursor:zoom-in;position:relative;transition:transform .14s ease,box-shadow .14s ease;}
+  .gal-zoom:hover,.gal-zoom:focus-visible{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--shadow-ink);outline:none;}
+  .gal-zoom::after{
+    content:"⤢";position:absolute;right:10px;bottom:10px;width:36px;height:36px;border-radius:50%;
+    border:var(--border);background:var(--violet);color:var(--on-violet);
+    display:grid;place-items:center;font-size:16px;line-height:1;
+    opacity:0;transform:scale(.7);transition:opacity .15s ease,transform .15s ease;pointer-events:none;
+  }
+  .gal-zoom:hover::after,.gal-zoom:focus-visible::after{opacity:1;transform:none;}
+
+  /* ============ PHOTO VIEWER (full screen) ============ */
+  .lightbox{
+    position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;
+    padding:64px 92px 70px;background:rgba(14,10,22,.95);
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  }
+  .lightbox[hidden]{display:none;}
+  .lb-stage{margin:0;display:flex;flex-direction:column;align-items:center;gap:14px;min-width:0;max-width:100%;}
+  .lb-img{
+    display:block;max-width:100%;width:auto;height:auto;
+    max-height:calc(100vh - 160px);max-height:calc(100dvh - 160px);
+    border:1.5px solid #000;border-radius:10px;box-shadow:6px 6px 0 var(--violet);background:#111;
+  }
+  .lb-cap{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.5;color:#E7DAFF;
+    display:flex;gap:12px;align-items:baseline;justify-content:center;text-align:center;max-width:72ch;
+  }
+  .lb-count{color:var(--violet);font-weight:600;white-space:nowrap;}
+  .lb-nav{
+    position:absolute;top:50%;transform:translateY(-50%);
+    width:54px;height:54px;border-radius:50%;border:var(--border);
+    background:var(--violet);color:var(--on-violet);font-size:19px;cursor:pointer;
+    box-shadow:4px 4px 0 rgba(0,0,0,.55);display:grid;place-items:center;
+    transition:transform .12s ease,background .12s ease;
+  }
+  .lb-nav:hover,.lb-nav:focus-visible{transform:translateY(-50%) scale(1.08);background:#B58CFF;outline:none;}
+  .lb-nav.prev{left:22px;}
+  .lb-nav.next{right:22px;}
+  .lightbox.single .lb-nav{display:none;}
+  .lb-close{position:absolute;top:16px;right:22px;}
+  @media (max-width:640px){
+    .lightbox{padding:62px 12px 100px;}
+    .lb-img{max-height:calc(100vh - 200px);max-height:calc(100dvh - 200px);}
+    .lb-nav{top:auto;bottom:24px;transform:none;width:50px;height:50px;}
+    .lb-nav:hover,.lb-nav:focus-visible{transform:scale(1.06);}
+    .lb-nav.prev{left:calc(50% - 66px);}
+    .lb-nav.next{right:calc(50% - 66px);}
+    .lb-close{right:12px;top:12px;}
+  }
+
+  /* ============ CERTIFICATE STRIP ============ */
+  .strip-wrap{position:relative;}
+  .strip{
+    display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;
+    align-items:flex-start;
+    padding:6px 4px 18px;scrollbar-width:thin;scrollbar-color:var(--violet) transparent;
+  }
+  .strip .yt-card{flex:0 0 285px;scroll-snap-align:start;}
+  .strip-btn{
+    position:absolute;top:34%;z-index:5;
+    width:42px;height:42px;border-radius:50%;border:var(--border);
+    background:var(--violet);box-shadow:var(--shadow);color:var(--on-violet);
+    font-size:16px;cursor:pointer;display:grid;place-items:center;
+    transition:transform .12s ease;
+  }
+  .strip-btn:hover{transform:scale(1.07);}
+  .strip-btn.prev{left:-14px;}
+  .strip-btn.next{right:-14px;}
+  .cert-thumb{
+    aspect-ratio:16/10;
+    background:
+      radial-gradient(circle, rgba(20,20,20,.14) 1px, transparent 1px) 0 0/14px 14px,
+      linear-gradient(135deg,#E7DAFF,#B98AFF);
+  }
+  /* the certificate sits on the purple mat like a sheet of paper */
+  .cert-mat{position:absolute;inset:12px;display:flex;align-items:center;justify-content:center;}
+  .cert-img{
+    display:block;max-width:100%;max-height:100%;width:auto;height:auto;
+    background:#fff;border:1px solid var(--line);border-radius:3px;
+    box-shadow:3px 3px 0 rgba(20,20,20,.85);
+  }
+  .cert-meta-text{min-width:0;}
+  .cert-org{
+    font-size:12px;color:#4a3a66;margin-top:3px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .cert-frame{
+    width:72%;height:70%;background:var(--window);border:var(--border);border-radius:6px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+    font-family:'IBM Plex Mono',monospace;text-align:center;padding:10px;
+  }
+  .cert-frame .ribbon{font-size:20px;}
+  .cert-frame b{font-size:11.5px;line-height:1.3;}
+  .cert-frame small{font-size:9.5px;color:#666;}
+
+  /* ============ MODAL ============ */
+  .overlay{
+    position:fixed;inset:0;z-index:200;background:rgba(20,16,30,.62);
+    display:none;align-items:flex-start;justify-content:center;
+    padding:5vh 18px;overflow-y:auto;
+  }
+  .overlay.open{display:flex;}
+  .modal{
+    width:min(880px,100%);background:var(--window);
+    border:var(--border);border-radius:14px;box-shadow:7px 7px 0 var(--shadow-ink);
+    overflow:hidden;animation:pop .18s ease;
+    margin-bottom:5vh;
+  }
+  @keyframes pop{from{transform:translateY(14px) scale(.98);opacity:0;}to{transform:none;opacity:1;}}
+  .modal .win-head{position:sticky;top:0;z-index:2;}
+  .close-x{
+    border:var(--border);background:var(--window);border-radius:7px;
+    font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;
+    padding:4px 11px;cursor:pointer;transition:all .12s ease;
+  }
+  .close-x:hover{background:var(--night);color:var(--violet);}
+  .modal-body{padding:24px;}
+  .video-ph{
+    aspect-ratio:16/9;border:var(--border);border-radius:var(--radius);
+    background:
+      radial-gradient(circle, rgba(20,20,20,.16) 1px, transparent 1px) 0 0/16px 16px,
+      linear-gradient(135deg,#E7DAFF,#B98AFF);
+    display:grid;place-items:center;position:relative;
+  }
+  .video-ph .big-play{
+    width:74px;height:74px;border-radius:50%;border:var(--border);
+    background:var(--night);color:var(--violet);display:grid;place-items:center;
+    font-size:26px;cursor:pointer;transition:transform .14s ease;
+  }
+  .video-ph .big-play:hover{transform:scale(1.08);}
+  .video-ph .vid-note{
+    position:absolute;bottom:12px;left:12px;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;
+    background:var(--window);border:var(--border);border-radius:6px;padding:4px 10px;
+  }
+  .modal-title-row{margin:20px 0 6px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:flex-start;}
+  .modal-title-row h3{font-size:21px;font-weight:700;line-height:1.25;}
+  .modal-meta{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#555;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .modal-roles{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;}
+  .modal-summary{font-size:14.5px;line-height:1.7;color:#2b2b2b;margin-top:10px;}
+
+  .doc-divider{
+    margin:26px 0 20px;display:flex;align-items:center;gap:12px;
+    font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  }
+  .doc-divider::after{content:"";flex:1;border-top:1.5px dashed var(--line);}
+  .doc-row{
+    display:grid;grid-template-columns:1.15fr 1fr;gap:20px;align-items:center;
+    padding:16px 0;border-bottom:1.5px dashed rgba(20,20,20,.3);
+  }
+  .doc-row:last-child{border-bottom:none;}
+  .doc-photo{
+    aspect-ratio:16/9;border:var(--border);border-radius:var(--radius);
+    display:grid;place-items:center;
+    font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;text-align:center;padding:10px;
+  }
+  /* projects with real pictures: the cover fills the 16:9 spot at the top of the popup,
+     documentation photos keep their own shape (set inline), and both open full screen on click */
+  .proj-hero{
+    display:block;width:100%;aspect-ratio:16/9;margin:0;padding:0;font:inherit;color:inherit;
+    border:var(--border);border-radius:var(--radius);overflow:hidden;
+    background:var(--violet-soft);box-shadow:var(--shadow);
+  }
+  .proj-hero img{display:block;width:100%;height:100%;object-fit:cover;}
+  .doc-photo.has-photo{
+    display:block;width:100%;margin:0;padding:0;font:inherit;color:inherit;
+    overflow:hidden;background:var(--violet-pale);box-shadow:var(--shadow);
+  }
+  .doc-photo.has-photo img{display:block;width:100%;height:100%;object-fit:cover;}
+
+  /* attachments (e.g. a project's PDF): "Open" shows it in a new tab, "Download" saves it */
+  .file-row{display:flex;align-items:stretch;gap:10px;flex-wrap:wrap;margin-top:16px;}
+  .file-chip{
+    display:flex;align-items:center;gap:13px;flex:1 1 300px;min-width:0;text-align:left;cursor:pointer;
+    font:inherit;color:inherit;background:var(--violet-pale);
+    border:var(--border);border-radius:10px;padding:10px 14px;box-shadow:var(--shadow);
+    transition:transform .12s ease,box-shadow .12s ease,background .12s ease;
+  }
+  .file-chip:hover,.file-chip:focus-visible{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--shadow-ink);background:var(--violet-soft);outline:none;}
+  .file-ico{
+    flex:none;width:40px;height:48px;border:var(--border);border-radius:5px 12px 5px 5px;background:#fff;
+    display:grid;place-items:end center;padding-bottom:7px;
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:700;color:#C62828;
+  }
+  .file-txt{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1;}
+  .file-txt b{font-size:14.5px;line-height:1.3;}
+  .file-txt small{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#555;overflow-wrap:anywhere;}
+  .file-go{flex:none;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;background:var(--night);color:var(--violet);border-radius:6px;padding:6px 10px;}
+  .file-dl{
+    flex:none;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;
+    background:var(--window);color:var(--ink);border:var(--border);border-radius:10px;padding:10px 14px;
+    transition:transform .12s ease,box-shadow .12s ease,background .12s ease;
+  }
+  .file-dl:hover,.file-dl:focus-visible{transform:translate(-2px,-2px);box-shadow:var(--shadow);background:var(--violet-pale);outline:none;}
+
+  /* link buttons (Chrome Web Store, GitHub, ...): open in a new tab */
+  .link-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;}
+  .proj-link{
+    display:flex;align-items:center;gap:11px;flex:1 1 220px;min-width:0;
+    font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;text-decoration:none;color:var(--ink);
+    background:var(--window);border:var(--border);border-radius:10px;padding:9px 14px;box-shadow:var(--shadow);
+    transition:transform .12s ease,box-shadow .12s ease,background .12s ease;
+  }
+  .proj-link.primary{background:var(--violet);color:var(--on-violet);}
+  .proj-link:hover,.proj-link:focus-visible{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--shadow-ink);outline:none;}
+  .proj-link:not(.primary):hover,.proj-link:not(.primary):focus-visible{background:var(--violet-pale);}
+  .pl-ico{flex:none;width:32px;height:32px;border:var(--border);border-radius:8px;background:#fff;color:var(--on-violet);display:grid;place-items:center;overflow:hidden;}
+  .pl-ico svg{width:18px;height:18px;}
+  .pl-ico img{width:22px;height:22px;object-fit:contain;display:block;}
+  .pl-txt{flex:1;min-width:0;}
+  .pl-txt small{display:block;margin-top:3px;font-size:11px;font-weight:500;}
+  .pl-go{flex:none;font-size:14px;}
+  .doc-text h4{font-size:15px;margin-bottom:7px;}
+  .doc-text p{font-size:13.5px;line-height:1.65;color:#333;}
+
+  /* cert modal extras */
+  .cert-detail{display:grid;grid-template-columns:1fr;gap:6px;margin-top:16px;}
+  .cred-row{
+    display:flex;justify-content:space-between;gap:14px;
+    font-family:'IBM Plex Mono',monospace;font-size:12.5px;
+    border:var(--border);border-radius:8px;padding:9px 14px;background:var(--violet-pale);
+  }
+  .cred-row b{color:var(--violet-strong);text-align:right;overflow-wrap:anywhere;}
+  .cert-view{
+    margin:0;padding:18px;border:var(--border);border-radius:var(--radius);
+    background:
+      radial-gradient(circle, rgba(20,20,20,.14) 1px, transparent 1px) 0 0/16px 16px,
+      var(--violet-pale);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .cert-full{
+    display:block;max-width:100%;max-height:72vh;width:auto;height:auto;
+    background:#fff;border:1px solid var(--line);border-radius:4px;
+    box-shadow:4px 4px 0 var(--shadow-ink);
+  }
+  .cert-verify{font-family:'IBM Plex Mono',monospace;font-size:12.5px;margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;align-items:baseline;}
+  .cert-verify a{color:var(--violet-strong);font-weight:600;}
+  .cert-verify small{color:#666;font-size:11px;}
+
+  /* toolkit window */
+  .tools-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .tool{display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center;}
+  .tool-ico{
+    width:52px;height:52px;border:var(--border);border-radius:12px;
+    background:var(--violet-pale);display:grid;place-items:center;
+    font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:600;color:#888;
+    line-height:1.2;padding:4px;
+    transition:transform .12s ease,box-shadow .12s ease,background .12s ease;
+  }
+  .tool:hover .tool-ico{transform:translate(-2px,-2px);box-shadow:3px 3px 0 var(--shadow-ink);background:var(--violet-soft);}
+  .tool span{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;}
+  .tool-ico.has-img{background:var(--window);padding:8px;display:flex;align-items:center;justify-content:center;}
+  .tool-ico.has-img img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block;}
+  .tool-ico.fill{padding:0;overflow:hidden;}
+  .tool-ico.fill img{width:100%;height:100%;max-width:none;max-height:none;object-fit:cover;}
+
+  /* ============ FOOTER ============ */
+  footer{
+    padding:44px var(--pad-x) 38px;
+    background-color:#1B1430;
+    background-image:radial-gradient(circle, rgba(243,240,234,.22) 1.1px, transparent 1.1px);
+    background-size:22px 22px;
+  }
+  .footer-term{
+    background:var(--night);color:#d8d8d8;border:1.5px solid var(--violet);border-radius:var(--radius);
+    box-shadow:5px 5px 0 rgba(160,107,255,.5);padding:18px 22px;
+    font-family:'IBM Plex Mono',monospace;font-size:12.5px;line-height:2;
+    margin-bottom:20px;
+  }
+  .footer-term .prm{color:var(--violet);font-weight:600;}
+  .footer-term .out{color:#9a9a9a;}
+  .footer-term .hl{color:var(--violet);}
+  .footer-bottom{
+    display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;
+    font-family:'IBM Plex Mono',monospace;font-size:12px;color:#B9B0D0;
+  }
+  .footer-bottom a{color:var(--violet);text-decoration:none;}
+  .footer-bottom a:hover{text-decoration:underline;}
+
+  .hidden{display:none!important;}
+
+  /* ============ RESPONSIVE ============ */
+  /* breakpoints sit ~64px wider than before: the sheet is narrower than the window */
+  @media (max-width:1012px){
+    .hero{grid-template-columns:1fr;}
+    .hero-right{justify-content:flex-start;padding-top:0;}
+  }
+  @media (max-width:960px){
+    .about-grid{grid-template-columns:1fr;}
+  }
+  /* phones/small tablets: drop the margins, the sheet goes edge to edge */
+  @media (max-width:760px){
+    :root{--gutter:0px;}
+    .page{margin:0;border:none;border-radius:0;box-shadow:none;}
+  }
+  @media (max-width:640px){
+    :root{--pad-x:20px;}
+    section{padding-top:52px;padding-bottom:52px;}
+    .hero-left{padding-top:42px;padding-bottom:42px;}
+    .hero-title-row{gap:16px;}
+    .hero-title-text{flex-basis:100%;}  /* phones: title + tagline always sit under the photo */
+    .hero-right{padding-bottom:42px;}
+    .topnav a{padding:5px 9px;font-size:11.5px;}
+    .doc-row{grid-template-columns:1fr;}
+    .fact-list{grid-template-columns:1fr;}
+    .skills-grid{grid-template-columns:1fr;}
+    .strip-btn.prev{left:-6px;}
+    .strip-btn.next{right:-6px;}
+    .modal-body{padding:16px;}
+  }
+
+  /* ============ SCROLL-IN ANIMATIONS (About, Projects, Gallery, Certificates) ============
+     Anything marked data-rv starts hidden and pops into place the first time it scrolls into view.
+       data-rv          → pop, after a 0.5s wait (windows, cards, arrow buttons)
+       data-rv="up"     → slide up straight away (headings, intro lines, filter bars)
+       data-rv="group"  → its children pop in one after another, after the 0.5s wait (the certificate shelf)
+     The 0.5s wait and the gap between items live in the SCROLL-IN ANIMATIONS script (POP_WAIT, STEP).
+     "rv-on" is put on <html> by the small script in <head>; without it nothing is hidden. */
+  [data-rv]{--rv-from:translateY(26px) scale(.9);--rv-over:translateY(-3px) scale(1.012);}
+  .window[data-rv]{--rv-from:translateY(34px) scale(.9);--rv-over:translateY(-3px) scale(1.01);transform-origin:50% 0;}
+
+  .rv-on [data-rv]:not([data-rv="group"]):not(.rv-in),
+  .rv-on [data-rv="group"]:not(.rv-in) > *{opacity:0;}
+
+  .rv-on [data-rv=""].rv-in,
+  .rv-on [data-rv="group"] > .rv-kid{animation:rv-pop .85s var(--rv-delay,0s) backwards;}
+  .rv-on [data-rv="up"].rv-in{animation:rv-up .65s cubic-bezier(.22,1,.36,1) var(--rv-delay,0s) backwards;}
+  /* the little section tag ("01 / profile") pops in just after its heading */
+  .rv-on .sec-head.rv-in .sec-tag{animation:rv-pop .6s calc(var(--rv-delay,0s) + .2s) backwards;}
+
+  @keyframes rv-pop{
+    0%  {opacity:0;transform:var(--rv-from);animation-timing-function:cubic-bezier(.2,.75,.3,1);}
+    58% {opacity:1;transform:var(--rv-over);animation-timing-function:cubic-bezier(.45,0,.35,1);}
+    100%{opacity:1;transform:none;}
+  }
+  @keyframes rv-up{
+    from{opacity:0;transform:translateY(18px);}
+    to  {opacity:1;transform:none;}
+  }
+
+  /* inside the About windows, once they've popped in:
+     the XP bar fills up, the focus-stats shape grows out of the middle, the toolkit icons pop in one by one */
+  .xp-fill{transition:width 1.2s cubic-bezier(.22,1,.36,1) calc(var(--rv-delay,0s) + .45s);}
+  .rv-on [data-rv]:not(.rv-in) .xp-fill{width:0!important;}
+  .radar-val{transition:transform 1s cubic-bezier(.2,1.25,.4,1) calc(var(--rv-delay,0s) + .4s);}
+  .rv-on [data-rv]:not(.rv-in) .radar-val{transform:scale(0);}
+  .tool{transition:opacity .4s ease,transform .55s cubic-bezier(.2,1.35,.4,1);transition-delay:calc(var(--rv-delay,0s) + .35s + var(--i,0) * 60ms);}
+  .rv-on [data-rv]:not(.rv-in) .tool{opacity:0;transform:translateY(10px) scale(.6);}
+  /* ============ DARK MODE ============
+     The moon / sun button at the right end of the top bar puts data-theme="dark" on <html>.
+     The choice is remembered in this browser (localStorage "lau-theme") and applied by the
+     script at the top of <head> before the page is drawn. Light mode is the default and
+     nothing below changes it. */
+  .theme-toggle{
+    display:inline-grid;place-items:center;width:36px;padding:0;cursor:pointer;
+    color:var(--ink);background:var(--window);border:1.5px solid var(--line);border-radius:8px;
+    transition:all .15s ease;
+  }
+  .theme-toggle svg{width:16px;height:16px;display:block;}
+  .theme-toggle .ico-sun{display:none;}
+  html[data-theme="dark"] .theme-toggle .ico-sun{display:block;}
+  html[data-theme="dark"] .theme-toggle .ico-moon{display:none;}
+  .theme-toggle:hover,.theme-toggle:focus-visible{
+    background:var(--violet);color:var(--on-violet);
+    transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--violet-strong);
+  }
+  /* while switching, colours fade over ~0.35s instead of snapping (class removed again by the script) */
+  html.theme-anim, html.theme-anim *, html.theme-anim *::before, html.theme-anim *::after{
+    transition:background-color .35s ease,color .35s ease,border-color .35s ease,box-shadow .35s ease,fill .35s ease,stroke .35s ease!important;
+  }
+
+  html[data-theme="dark"]{
+    color-scheme:dark;
+    --paper:#16121F;          /* the sheet */
+    --window:#211B2E;         /* windows, cards, inputs */
+    --desk:#0D0A13;           /* backdrop in the side margins */
+    --ink:#EEE9F7;            /* text */
+    --line:#D3C9E6;           /* outlines and dashed dividers */
+    --shadow-ink:#7C3BFF;     /* hard shadows turn purple */
+    --night:#0B0910;          /* black fills: top bar, tags, pills */
+    --violet-strong:#B794FF;  /* purple text, lighter so it reads on dark */
+    --violet-soft:#3A2C5C;    /* window title bars, hover fills */
+    --violet-pale:#2A2140;    /* fact boxes, badges, file chips */
+  }
+  /* backgrounds */
+  html[data-theme="dark"] body{background-image:radial-gradient(circle, rgba(255,255,255,.07) 1.1px, transparent 1.1px);}
+  html[data-theme="dark"] .page{background-image:radial-gradient(circle, rgba(255,255,255,.08) 1.1px, transparent 1.1px);}
+  html[data-theme="dark"] .topbar{border-bottom-color:rgba(238,233,247,.18);}
+  html[data-theme="dark"] section.purple{background-color:#1F1633;background-image:radial-gradient(circle, rgba(160,107,255,.32) 1.1px, transparent 1.1px);}
+  html[data-theme="dark"] section.dark,
+  html[data-theme="dark"] footer{background-color:#0F0B17;background-image:radial-gradient(circle, rgba(243,240,234,.11) 1.1px, transparent 1.1px);}
+  html[data-theme="dark"] .overlay{background:rgba(5,3,10,.72);}
+  /* the Projects section used the paper colour for its light-on-dark text */
+  html[data-theme="dark"] section.dark .sec-head h2,
+  html[data-theme="dark"] section.dark .filter-bar label,
+  html[data-theme="dark"] section.dark .card-meta h3,
+  html[data-theme="dark"] section.dark .mono{color:var(--ink);}
+  /* body text and greys */
+  html[data-theme="dark"] .hero-tagline{color:#CFC7DD;}
+  html[data-theme="dark"] .about-desc,
+  html[data-theme="dark"] .modal-summary{color:#E4DEEE;}
+  html[data-theme="dark"] .work-row li,
+  html[data-theme="dark"] .doc-text p{color:#D9D2E6;}
+  html[data-theme="dark"] .sec-sub,
+  html[data-theme="dark"] .card-meta .sub,
+  html[data-theme="dark"] .modal-meta,
+  html[data-theme="dark"] .file-txt small{color:#B9B0D0;}
+  html[data-theme="dark"] section.purple .sec-sub{color:#CDBDF0;}
+  html[data-theme="dark"] section.purple .card-meta .sub,
+  html[data-theme="dark"] .cert-org{color:#C4B5E8;}
+  html[data-theme="dark"] .work-row small,
+  html[data-theme="dark"] .edu-row small,
+  html[data-theme="dark"] .contact-link small,
+  html[data-theme="dark"] .cert-frame small,
+  html[data-theme="dark"] .cert-verify small,
+  html[data-theme="dark"] .tool-ico{color:#A99FBE;}
+  /* dashed dividers */
+  html[data-theme="dark"] .work-row + .work-row,
+  html[data-theme="dark"] .edu-row + .edu-row{border-top-color:rgba(238,233,247,.24);}
+  html[data-theme="dark"] .skill-col li + li{border-top-color:rgba(238,233,247,.16);}
+  html[data-theme="dark"] .doc-row{border-bottom-color:rgba(238,233,247,.22);}
+  /* logos stay on white tiles so dark logos (GitHub, CapCut, ...) stay visible */
+  html[data-theme="dark"] .edu-logo,
+  html[data-theme="dark"] .tool-ico.has-img,
+  html[data-theme="dark"] .contact-link .ico.ico-img{background:#fff;}
+  html[data-theme="dark"] .edu-logo:hover,
+  html[data-theme="dark"] .tool:hover .tool-ico.has-img{background:#EDE2FF;}
+  /* purple mats and placeholder thumbnails, deepened */
+  html[data-theme="dark"] .cert-thumb{
+    background:radial-gradient(circle, rgba(255,255,255,.08) 1px, transparent 1px) 0 0/14px 14px,
+               linear-gradient(135deg,#2E2348,#5B3FA0);
+  }
+  html[data-theme="dark"] .video-ph{
+    background:radial-gradient(circle, rgba(255,255,255,.08) 1px, transparent 1px) 0 0/16px 16px,
+               linear-gradient(135deg,#2E2348,#5B3FA0);
+  }
+  html[data-theme="dark"] .cert-view{
+    background:radial-gradient(circle, rgba(255,255,255,.07) 1px, transparent 1px) 0 0/16px 16px,var(--violet-pale);
+  }
+  html[data-theme="dark"] .tA{background:linear-gradient(135deg,#2E2348,#5B3FA0);}
+  html[data-theme="dark"] .tB{background:repeating-linear-gradient(45deg,#271E3B 0 14px,#33275A 14px 28px);}
+  html[data-theme="dark"] .tC{background:radial-gradient(circle at 30% 30%,#3A2C5C 0 26%,transparent 27%),radial-gradient(circle at 75% 65%,#5B3FA0 0 30%,transparent 31%),#2A2140;}
+  html[data-theme="dark"] .tD{background:linear-gradient(180deg,#211B2E 55%,#6B47B8 55%);}
+  html[data-theme="dark"] .tE{background:conic-gradient(from 200deg at 60% 40%,#2E2348,#6B47B8,#2E2348);}
+  html[data-theme="dark"] .tF{background:repeating-radial-gradient(circle at 50% 120%,#33275A 0 18px,#271E3B 18px 36px);}
+  html[data-theme="dark"] .thumb .thumb-label{text-shadow:0 1px 0 rgba(0,0,0,.45);}
+  /* purple bars keep their original two shades */
+  html[data-theme="dark"] .xp-fill{background:repeating-linear-gradient(45deg,#A06BFF 0 12px,#7C3BFF 12px 24px);background-size:34px 100%;}
+  html[data-theme="dark"] .avatar{background:linear-gradient(135deg,#A06BFF 0%,#7C3BFF 100%);}
+  html[data-theme="dark"] .avatar.logo{background:#fff;}
+  /* focus_stats radar chart */
+  html[data-theme="dark"] .radar-wrap .r-grid{stroke:rgba(238,233,247,.28);}
+  html[data-theme="dark"] .radar-wrap .r-dot{stroke:#EEE9F7;}
+  html[data-theme="dark"] .radar-wrap .r-label{fill:#EEE9F7;}
+  html[data-theme="dark"] .radar-wrap .r-val{fill:#B794FF;}
+</style>
+</head>
+<body id="top">
+
+<!-- ============ TOP BAR ============ -->
+<header class="topbar">
+  <a class="brand" href="#top">Lau was here<span>.</span></a>
+  <nav class="topnav" aria-label="Main navigation">
+    <a href="#about">About Lau</a>
+    <a href="#projects">Projects</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#certs">Certificates</a>
+    <button type="button" class="theme-toggle" id="themeToggle" aria-pressed="false" aria-label="Switch to dark mode" title="Dark mode">
+      <svg class="ico-moon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.6 14.6A8.6 8.6 0 0 1 9.4 3.4a8.6 8.6 0 1 0 11.2 11.2z"/></svg>
+      <svg class="ico-sun" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="4.3"/><path d="M12 2.6v2.3M12 19.1v2.3M2.6 12h2.3M19.1 12h2.3M5.4 5.4L7 7M17 17l1.6 1.6M5.4 18.6L7 17M17 7l1.6-1.6"/></svg>
+    </button>
+  </nav>
+</header>
+
+<!-- ============ PAGE SHEET (centered, margins on both sides) ============ -->
+<div class="page">
+
+<!-- ============ HERO ============ -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-title-row">
+      <div class="pfp" id="pfp" aria-label="Profile photos of Laurence Asencio"></div>
+      <div class="hero-title-text">
+        <h1>Lau <span class="was-here">was here<em>.</em></span></h1>
+        <p class="hero-tagline">// BSIT student&nbsp;· builder&nbsp;· creator<br>I make websites, content, research, and the occasional chaotic side quest.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <nav class="chip-stack" aria-label="Jump to a section">
+      <a class="chip dark" href="#projects">Projects</a>
+      <a class="chip" href="#gallery">Gallery</a>
+      <a class="chip" href="#certs">Certificates</a>
+      <a class="chip fill" href="#about" style="margin-top:8px;">Get to know Lau</a>
+    </nav>
+  </div>
+</div>
+
+<!-- ============ ABOUT ============ -->
+<section id="about" class="purple">
+  <div class="sec-head" data-rv="up"><h2>About Lau</h2><span class="sec-tag">01 / profile</span></div>
+  <div class="about-grid">
+
+    <div class="window" data-rv>
+      <div class="win-head"><span class="title">about_me.txt</span><span class="mw-icons">⧉ ⤓ ⚙</span></div>
+      <div class="win-body">
+
+        <div class="sec-div">personal_info</div>
+        <div class="fact-list">
+          <div class="fact"><b>First name</b>Laurence</div>
+          <div class="fact"><b>Last name</b>Asencio</div>
+          <div class="fact"><b>Nationality</b>Filipino</div>
+          <div class="fact"><b>Languages</b>English &amp; Tagalog</div>
+          <div class="fact">
+            <b>XP (Age)</b>
+            <div class="xp-row">
+              <div class="xp-track"><div class="xp-fill" id="xpFill" style="width:22%;"></div></div>
+              <span class="xp-val"><span class="age" id="ageVal">22</span> / 100</span>
+            </div>
+          </div>
+          <div class="fact"><b>Location</b>Angeles City, Pampanga, Philippines</div>
+        </div>
+
+        <div class="sec-div">summary</div>
+        <div class="about-desc">
+          <p>Hi! I'm <b>Laurence</b>, <b>Lau</b> for short. I'm a 4th-year BSIT student at National University - Clark who likes turning random ideas into things people can actually click, watch, or use. By day I'm buried in coursework and projects; by night I'm probably editing a video, designing something, or breaking my own code on purpose.</p>
+          <p>My background spans marketing, professional content creation, and mobile and web development, and I've led team projects as project manager and lead researcher, from an AI-powered sign language learning app to a transport management system with an ESP32 GPS tracker.</p>
+        </div>
+
+        <div class="sec-div">work_experience</div>
+        <div class="work-row">
+          <span class="edu-logo"><img data-asset="globe" alt="Globe Telecom logo"></span>
+          <span>
+            <span class="work-title">Student Ambassador</span>
+            <small>Globe Telecom · March 2026</small>
+            <ul>
+              <li>Took part in the <i>Globe Social Media Internship</i> at Art in the Park 2026, Jaime Velasquez Park, Makati City.</li>
+              <li>Participated in the <i>Globe Social Media 101 Workshop</i> in preparation for Art in the Park 2026.</li>
+            </ul>
+          </span>
+        </div>
+        <div class="work-row">
+          <span class="edu-logo"><img data-asset="samsung" alt="Samsung Electronics logo"></span>
+          <span>
+            <span class="work-title">Student Ambassador</span>
+            <small>Samsung Electronics · July 2024 – July 2025</small>
+            <ul>
+              <li>Participated in specialized workshops on marketing, technical skills, personal growth, and content creation.</li>
+              <li>Secured the <i>Top 3 Award</i> at the end of the program.</li>
+            </ul>
+          </span>
+        </div>
+
+        <div class="sec-div">education</div>
+        <div class="edu-row">
+          <span class="edu-logo"><img data-asset="nu" alt="National University logo"></span>
+          <span><span class="edu-name">National University – Clark</span><small>BS Information Technology · July 2023 – Present</small></span>
+        </div>
+        <div class="edu-row">
+          <span class="edu-logo"><img data-asset="hau" alt="Holy Angel University logo"></span>
+          <span><span class="edu-name">Holy Angel University</span><small>Senior High School · TVL-ICT · June 2021 – April 2023</small></span>
+        </div>
+
+        <div class="sec-div">skills</div>
+        <div class="skills-grid">
+          <div class="skill-col">
+            <h4>hard_skills</h4>
+            <ul>
+              <li>Web development (HTML, CSS, JavaScript)</li>
+              <li>Mobile development (Kotlin, Flutter/Dart)</li>
+              <li>UI/UX design</li>
+              <li>Graphic design (Procreate, Canva)</li>
+              <li>Video editing (CapCut)</li>
+              <li>Content &amp; social media</li>
+            </ul>
+          </div>
+          <div class="skill-col">
+            <h4>soft_skills</h4>
+            <ul>
+              <li>Team leadership &amp; project management</li>
+              <li>Communication</li>
+              <li>Team collaboration</li>
+              <li>Creative problem-solving</li>
+              <li>Adaptability</li>
+              <li>Time management</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="about-side">
+      <div class="window" data-rv>
+        <div class="win-head"><span class="title">contact_links.cfg</span><span class="mw-icons">⚙</span></div>
+        <div class="win-body" style="padding:16px;">
+          <div class="contact-list">
+            <a class="contact-link" href="mailto:lau.asencio26@gmail.com"><span class="ico">✉</span><span>Email<small>lau.asencio26@gmail.com</small></span></a>
+            <a class="contact-link" href="tel:+639692996772"><span class="ico">☎</span><span>Number<small>0969-299-6772</small></span></a>
+            <a class="contact-link" href="https://www.linkedin.com/in/laurence-asencio-b10194256/" target="_blank" rel="noopener"><span class="ico ico-img"><img data-asset="linkedin" alt=""></span><span>LinkedIn<small>/in/laurence-asencio-b10194256</small></span></a>
+            <a class="contact-link" href="https://github.com/lauttey" target="_blank" rel="noopener"><span class="ico ico-img"><img data-asset="github" alt=""></span><span>GitHub<small>github.com/lauttey</small></span></a>
+            <a class="contact-link" href="https://www.facebook.com/LaurenceAsencio" target="_blank" rel="noopener"><span class="ico ico-img"><img data-asset="facebook" alt=""></span><span>Facebook<small>fb.com/LaurenceAsencio</small></span></a>
+            <a class="contact-link" href="https://www.tiktok.com/@lau.prlly" target="_blank" rel="noopener"><span class="ico ico-img"><img data-asset="tiktok" alt=""></span><span>TikTok<small>@lau.prlly</small></span></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="window" data-rv>
+        <div class="win-head"><span class="title">focus_stats.svg</span><span class="mw-icons">⤓ ⚙</span></div>
+        <div class="win-body">
+          <div class="radar-wrap" id="radarChart"></div>
+        </div>
+      </div>
+
+      <div class="window" data-rv>
+        <div class="win-head"><span class="title">toolkit.pkg</span><span class="mw-icons">⤓ ⚙</span></div>
+        <div class="win-body">
+          <div class="tools-grid">
+            <div class="tool"><div class="tool-ico has-img"><img data-asset="vscode" alt=""></div><span>VS Code</span></div>
+            <div class="tool"><div class="tool-ico has-img"><img data-asset="androidstudio" alt=""></div><span>Android Studio</span></div>
+            <div class="tool"><div class="tool-ico has-img fill"><img data-asset="javascript" alt=""></div><span>JavaScript</span></div>
+            <div class="tool"><div class="tool-ico has-img"><img data-asset="flutter" alt=""></div><span>Flutter</span></div>
+            <div class="tool"><div class="tool-ico has-img"><img data-asset="kotlin" alt=""></div><span>Kotlin</span></div>
+            <div class="tool"><div class="tool-ico has-img"><img data-asset="canva" alt=""></div><span>Canva</span></div>
+            <div class="tool"><div class="tool-ico has-img fill"><img data-asset="procreate" alt=""></div><span>Procreate</span></div>
+            <div class="tool"><div class="tool-ico has-img"><img data-asset="capcut" alt=""></div><span>CapCut</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ PROJECTS ============ -->
+<section id="projects" class="dark">
+  <div class="sec-head" data-rv="up"><h2>Projects</h2><span class="sec-tag">02 / the work</span></div>
+  <p class="sec-sub" data-rv="up">// Click any card to open its window, then scroll for the full documentation. Click any picture to see it full screen.</p>
+
+  <div class="filter-bar" data-rv="up">
+    <label for="projSort">sort:</label>
+    <div class="select-wrap">
+      <select id="projSort">
+        <option value="latest" selected>By latest date</option>
+        <option value="oldest">By oldest date</option>
+      </select>
+    </div>
+    <label for="projFilter">category:</label>
+    <div class="select-wrap">
+      <select id="projFilter">
+        <option value="all" selected>All categories</option>
+        <option value="Website">Website</option>
+        <option value="Content Creation">Content Creation</option>
+        <option value="Research">Research</option>
+        <option value="Graphic Design">Graphic Design</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+    <span class="count-pill" id="projCount"></span>
+  </div>
+
+  <div class="card-grid" id="projGrid"></div>
+</section>
+
+<!-- ============ GALLERY ============ -->
+<section id="gallery">
+  <div class="sec-head" data-rv="up"><h2>Gallery</h2><span class="sec-tag">03 / outside the screen</span></div>
+  <p class="sec-sub" data-rv="up">// Life beyond the laptop — collabs, events, community work, and other adventures. Same drill: click to open.</p>
+
+  <div class="filter-bar" data-rv="up">
+    <label for="galSort">sort:</label>
+    <div class="select-wrap">
+      <select id="galSort">
+        <option value="latest" selected>By latest date</option>
+        <option value="oldest">By oldest date</option>
+      </select>
+    </div>
+    <label for="galFilter">category:</label>
+    <div class="select-wrap">
+      <select id="galFilter">
+        <option value="all" selected>All categories</option>
+        <option value="Collaboration">Collaboration</option>
+        <option value="Event">Event</option>
+        <option value="Community">Community</option>
+        <option value="Travel">Travel</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+    <span class="count-pill" id="galCount"></span>
+  </div>
+
+  <div class="card-grid" id="galGrid"></div>
+</section>
+
+<!-- ============ CERTIFICATES ============ -->
+<section id="certs" class="purple">
+  <div class="sec-head" data-rv="up"><h2>Certificates &amp; Achievements</h2><span class="sec-tag">04 / receipts</span></div>
+  <p class="sec-sub" data-rv="up">// Slide through the shelf → click a certificate to see the full details, LinkedIn-licenses style.</p>
+
+  <div class="filter-bar" data-rv="up">
+    <label for="certSort">sort:</label>
+    <div class="select-wrap">
+      <select id="certSort">
+        <option value="latest" selected>By latest date</option>
+        <option value="oldest">By oldest date</option>
+      </select>
+    </div>
+    <label for="certCatFilter">category:</label>
+    <div class="select-wrap">
+      <select id="certCatFilter">
+        <option value="all" selected>All categories</option>
+        <option value="Certificate">Certificate</option>
+        <option value="Certification">Certification</option>
+        <option value="Award">Award</option>
+        <option value="Others">Others</option>
+      </select>
+    </div>
+    <label for="certFieldFilter">field:</label>
+    <div class="select-wrap">
+      <select id="certFieldFilter">
+        <option value="all" selected>All fields</option>
+      </select>
+    </div>
+    <span class="count-pill" id="certCount"></span>
+  </div>
+
+  <div class="strip-wrap">
+    <button class="strip-btn prev" data-rv id="certPrev" aria-label="Scroll certificates left">←</button>
+    <div class="strip" id="certStrip" data-rv="group" tabindex="0" aria-label="Certificates carousel"></div>
+    <button class="strip-btn next" data-rv id="certNext" aria-label="Scroll certificates right">→</button>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="footer-term">
+    <div><span class="prm">lau@portfolio</span>:~$ echo "thanks for scrolling :>"</div>
+    <!-- <div class="out">→ your local time is <span class="hl" id="ftTime">--:--:--</span></div> -->
+    <!-- <div class="out">→ this site has been visited <span class="hl">∞</span> times (probably)</div> -->
+    <div class="out">→ <span id="ftQuote">"I'll take you to the moon!"</span></div>
+    <div><span class="prm">lau@portfolio</span>:~$ <span style="animation:none;">▮</span></div>
+  </div>
+  <!-- <div class="footer-bottom">
+    <span>This website serves as a portfolio as well as proof that Lau was here</span>
+    <span>Live and be kinder each day · <a href="#top">back to the top ↑</a></span>
+  </div> -->
+</footer>
+
+</div><!-- /.page -->
+
+<!-- ============ MODAL ============ -->
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modalWinTitle">
+  <div class="modal">
+    <div class="win-head">
+      <span class="title" id="modalWinTitle">window.exe</span>
+      <button class="close-x" id="modalClose">✕ close</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- ============ PHOTO VIEWER (full screen, opened from a gallery popup) ============ -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" hidden>
+  <button class="close-x lb-close" id="lbClose" aria-label="Close photo viewer">✕ close</button>
+  <button class="lb-nav prev" id="lbPrev" aria-label="Previous photo">←</button>
+  <figure class="lb-stage">
+    <img class="lb-img" id="lbImg" alt="">
+    <figcaption class="lb-cap"><span class="lb-count" id="lbCount"></span><span id="lbCap"></span></figcaption>
+  </figure>
+  <button class="lb-nav next" id="lbNext" aria-label="Next photo">→</button>
+</div>
+
+<script>
+/* ============================================================
+   DATA — filled from the resume. Thumbnails, videos, photos and the
+   documentation write-ups are still placeholders.
+   date   = sort key (YYYY-MM-DD; only used for "latest/oldest" sorting)
+   period = what's shown on the card ("Apr – Oct 2026")
+   Thumb classes: tA..tF (decorative gradient placeholders).
+   logo   = optional: a logo on the card instead of the "L" (a name from ASSETS; see LOGO_NAMES)
+   ============================================================ */
+const PH_DOCS = [
+  {h:"The problem",      t:"Placeholder: what the project set out to solve, and for whom."},
+  {h:"How it was built", t:"Placeholder: the stack, the architecture, and your part in it."},
+  {h:"The result",       t:"Placeholder: what came out of it, what it does, and what's next."}
+];
+
+const PROJECTS = [
+  {
+    /* real pictures in PROJECT_IMAGES: the RoadRunner logo is the cover, then one screenshot per documentation row */
+    id:"roadrunner", title:"RoadRunner Tourist Transport Inc: A Web-Based Transport Service Management System with ESP32-Integrated GPS Tracker",
+    period:"Apr – Oct 2026", date:"2026-10-01", category:"Website",
+    tagline:"A capstone built for a real client, RoadRunner Tourist Transport, a van rental and shuttle company in Pampanga. The system moves their whole workflow online: customers book trips with an instant fare estimate and pay online, while staff run bookings, drivers, vehicles, maintenance and finances from their own role-based panels. ESP32 GPS trackers report each vehicle's position to a live fleet map, and Roadie, an AI assistant, answers questions about availability, prices and bookings in English or Tagalog. Built on Firebase with the Google Maps API.",
+    roles:["Project Manager","Lead Researcher"],
+    thumb:"tA",
+    docs:[
+      { h:"The landing page", t:"The public site shows the fleet, the company's contact details and a Book Now button. Roadie, the AI assistant, sits in the corner of every page to check availability, estimate trip prices and help with bookings. It runs on Gemini through a Cloudflare Worker, with backup models in case one is down, and only uses the tools each role is allowed." },
+      { h:"How to book", t:"Booking takes three steps: create an account and confirm it, pick the route on a map and the vehicles needed to see the fare before committing, then follow the trip from approval to arrival, with the assigned driver, the plate number and the vehicle live on the map." },
+      { h:"The fleet", t:"Cards for each vehicle type show what it is and how many it seats: a sedan for 4, an SUV for 6 and a van for 14, with the van's seat layout drawn out. The About Us section below introduces the company." },
+      { h:"One dashboard, every role", t:"Staff sign in to a dashboard with a panel for each role: Super Admin, Dispatcher, Driver, Accountant and Maintenance. Every page checks the account's roles, so each person only reaches the panels they're allowed to use." },
+      { h:"Live GPS tracking", t:"ESP32 trackers report each vehicle's location to Firebase, and the fleet map shows them on Google Maps with the plate, tracker ID, status, coordinates, speed and when it last reported. Vehicles can be searched by plate or filtered by type, signal and status." },
+      { h:"Booking details", t:"The dispatcher's view of a booking: contact person, pick-up time, passengers and the full route, drawn on a map with every stop. From here the dispatcher moves the trip along (for example from Scheduled to On Trip), assigns vehicles and drivers with Edit Fleet, prints the travel ticket or cancels the booking." },
+      { h:"Travel ticket", t:"Print turns a booking into the company's paper travel ticket, already filled in with the driver, plate number, client, travel date and itinerary, with space for the passenger list, odometer readings, extra expenses and signatures." },
+      { h:"Custom booking · 1 Schedule", t:"Dispatchers can also book trips for walk-in and company clients in three steps. Step one takes the contact details, passengers, trip length and pick-up date, can link the booking to a customer's account, and only offers vehicles that are free on that date." },
+      { h:"Custom booking · 2 Route", t:"Step two is the route planner. The pick-up point and destinations are set on a map, a round trip returns to the pick-up automatically, and the Google Maps API works out the total distance." },
+      { h:"Custom booking · 3 Summary", t:"Step three breaks the price down per vehicle: fuel, distance and time charges plus a 20% markup, checked against the minimum base fee. That's multiplied by the number of vehicles and the expressway toll is added, giving the total that's saved and sent to dispatch." },
+      { h:"Maintenance panel", t:"Post-trip tasks appear on their own once a booking is marked Finished: vehicles to clean, vehicles that need repairs, and a history of every action. The fleet overview tracks each vehicle's condition, the kilometres since its last oil change, and notes from drivers, like a broken AC." },
+      { h:"Reports · Cost vs profit", t:"The accountant's reports open with the money collected and the trips finished, next to a chart that switches between income, collected vs outstanding, and cost vs profit, with the profit margin in the middle." },
+      { h:"Reports · Financial records", t:"Below it, filters by date range and client (several spellings of one company fold into a single report) drive a table of every booking's markup, fees, fuel, driver costs and allowances, with totals, an Excel export and landscape printing. Each booking keeps the rates from the day it was made, so changing a fee later never rewrites past reports." }
+    ],
+    photos:[
+      "The RoadRunner Tourist Transport Inc. logo",
+      "The RoadRunner landing page, with Roadie the AI assistant open",
+      "How to Book: create your account, make a booking, monitor your booking",
+      "The fleet cards and the About Us section",
+      "The staff dashboard, with a panel for each role",
+      "Live GPS tracking of the fleet from the ESP32 trackers",
+      "A booking's details, with the dispatcher controls and the route map",
+      "The printable travel ticket for a booking",
+      "Create Custom Booking, step 1: schedule and vehicles",
+      "Create Custom Booking, step 2: the route planner",
+      "Create Custom Booking, step 3: the summary and price estimate",
+      "The Maintenance Panel: cleaning, repairs and the fleet overview",
+      "Accountant reports: the cost vs profit chart",
+      "Accountant reports: filters and financial records"
+    ]
+  },
+  {
+    /* real pictures in PROJECT_IMAGES and the submission PDF in PROJECT_FILES (both at the bottom of this file);
+       files = attachments shown as an "Open / Download" button in the popup */
+    id:"monsoon-ai", title:"Monsoon AI", date:"2026-05-17", category:"Website", logo:"vinuni",
+    tagline:"A 365-day climate resilience platform that turns official weather data, satellite imagery and household profiles into plain-language alerts by SMS and web app, with a dashboard that helps local governments send rescue teams out before a storm hits. Built by Team Monsoon for the Asian Hackathon for Green Future 2026 and submitted for the Preliminary Round on May 17, 2026.",
+    roles:["Project Manager","Lead Researcher","Front-end Developer"],
+    thumb:"tC",
+    files:[ { id:"monsoon-ai-prelim", label:"Preliminary Round submission" } ],
+    docs:[
+      { h:"Feature 1: Shelter vs. Evacuate Engine", t:"A deterministic engine cross-checks flood signals and works out personalized evacuation times to the nearest shelter. GPT-5 mini only translates the result into plain language and does none of the calculations, so it can't hallucinate a life-safety number." },
+      { h:"Feature 2: Dual-Layer Air Quality & Heat Advisory", t:"Satellite data spots local fire smoke and transboundary haze against a self-calibrating baseline, then sends year-round health advisories tailored to each user: warnings for asthmatics, alerts for the elderly, and flags for dangerous heat indexes." },
+      { h:"Feature 3: Predictive LGU Triage Manifest", t:"Twenty-four hours before landfall, the LGU dashboard ranks households by structural vulnerability and demographic risk, so local governments can pre-deploy rescue teams with one-tap routing." },
+      { h:"Feature 4: Micro-Responder Dispatch Protocol", t:"When a vulnerable user triggers a critical alert, a PostGIS nearest-neighbor query pings the closest enrolled community warden for a visual check or help evacuating, without tying up central rescue boats." },
+      { h:"Feature 5: Two-Way SMS Query Bot", t:"Citizens text keywords like STATUS, EVAC or FLOOD and get near-instant, localized replies through a strict keyword router. No smartphone or internet needed, and households can register through the same bot." },
+      { h:"SMS bot and web app bot", t:"The same engine answers by text message and in the web app's chat, so people get the same guidance whichever they use." },
+      { h:"Team Monsoon", t:"Lau as Project Manager and Lead Researcher, with Kenneth Punsalan, Mikaella Teopaco and Jaren Kendrick Yambao. The full submission, including the gap analysis, tech stack and references, is in the PDF above." }
+    ],
+    photos:[
+      "Monsoon AI logo",
+      "Feature 1, the Shelter vs. Evacuate Engine, in the pitch video",
+      "Feature 2, the Dual-Layer Air Quality Advisory, in the pitch video",
+      "Feature 3, the Predictive LGU Triage Manifest dashboard, in the pitch video",
+      "Feature 4, the Micro-Responder Dispatch Protocol, in the pitch video",
+      "Feature 5, how the Two-Way SMS Query Bot works, in the pitch video",
+      "Feature 5, the SMS Query Bot and the Web App Bot, in the pitch video",
+      "Team Monsoon in the pitch video"
+    ]
+  },
+  {
+    /* real pictures in PROJECT_IMAGES: the SIGN UP logo is the cover, then one screenshot per documentation row */
+    id:"sign-up-plus", title:"SIGN UP+", period:"Apr – May 2026", date:"2026-05-01", category:"Website",
+    tagline:"Like Duolingo, but for sign language. SIGN UP+ is a gamified, CEFR-aligned course in Filipino Sign Language (FSL) and American Sign Language (ASL) that runs in the browser, using AI hand-tracking to check each sign through the camera. Every lesson goes in three stages (copy a sign, recognize it, then recall it from memory) across 30 levels from A1 to C2, with about 916 signs per language.",
+    roles:["Project Manager","Lead Researcher"],
+    thumb:"tE",
+    docs:[
+      { h:"The landing page", t:"The landing page sums up the idea: speak with your hands, from A1 to mastery. It highlights active AI recognition, nothing to install since everything runs in the browser, and 3 CEFR certificates, and lets visitors start free or look through the curriculum first." },
+      { h:"The learning path", t:"Lessons are laid out as a path, Duolingo-style, grouped by CEFR level from A1 Breakthrough to C2 Mastery. A1 starts with The Alphabet, then Numbers & Quantities, Greetings & Farewells, About Myself and Everyday Objects. A picker at the top switches the course between FSL and ASL, and a Quick tips card reminds learners to face the camera, keep the lighting even and hold each sign for about a second." },
+      { h:"Stage 1 · Copy", t:"Each lesson starts by copying. The app shows the sign with a short tip (for Y: thumb and pinky out to the sides, other fingers folded down) and the learner mirrors it on camera. MediaPipe hand-tracking draws the points of the hand over the video and says \"Got it\" once the sign is held steady." },
+      { h:"Stage 2 · Recognize", t:"Then it flips around: the app shows a hand shape and the learner picks the letter it makes from four choices, by clicking, tapping or pressing 1–4. Every question has a countdown, and a wrong answer or running out of time costs a heart." },
+      { h:"Stage 3 · Recall", t:"Last comes recall, with no picture to copy: the app shows only the letter, and the learner signs it from memory before time runs out while the camera checks it. XP builds up through the lesson, and every mistake costs one of the hearts." },
+      { h:"Plans", t:"A freemium model. Module 1 (A1 and A2, 10 lessons) is free forever, with live hand-tracking, 3 hearts a day, streaks, XP, badges and leagues. Individual Premium (₱299 a month, or ₱2,390 a year) unlocks all 30 levels up to C2, unlimited hearts, a review of past mistakes and 3 CEFR-aligned certificates. Academe Premium is a custom plan for schools, hospitals, government offices and companies, with bulk seats, an admin dashboard and progress reports." }
+    ],
+    photos:[
+      "The SIGN UP logo: Bridging Communication One Sign at a Time",
+      "The SIGN UP+ landing page: Speak with your hands. From A1 to mastery.",
+      "The A1 Breakthrough learning path, from The Alphabet to Everyday Objects",
+      "Stage 1, Copy: Lau mirrors the letter Y on camera, with hand-tracking points over his hand",
+      "Stage 2, Recognize: picking which letter a hand sign makes, from four choices",
+      "Stage 3, Recall: Lau signs the letter O from memory",
+      "The SIGN UP+ plans: Free, Individual Premium and Academe Premium"
+    ]
+  },
+  {
+    /* real pictures in PROJECT_IMAGES; links = buttons in the popup that open in a new tab
+       (icon "store" = shopping-bag icon, "github" = the GitHub logo from the contact links) */
+    id:"qr-code-scanner", title:"QR Code Scanner (Chrome Desktop)", date:"2026-04-14", category:"Other",
+    tagline:"A Chrome extension that scans the page you're on for QR codes and shows each code's link right beside it, with buttons to open or copy it. Published on the Chrome Web Store, with the code on GitHub.",
+    roles:["Full Stack Developer"],
+    thumb:"tB",
+    links:[
+      { label:"Chrome Web Store", url:"https://chromewebstore.google.com/detail/qr-code-scanner/pfpekalpjjfelplgmoamhmkmdkpaejgg", icon:"store" },
+      { label:"GitHub repo", url:"https://github.com/lauttey/qr-code-scanner-chrome-extension", icon:"github" }
+    ],
+    docs:[
+      { h:"Scan Page for QRs", t:"One click on Scan Page for QRs checks the whole page. Every QR code it finds gets a purple frame and a small panel with its link, an Open Link button and a Copy Link button." },
+      { h:"Working on a real page", t:"Here it picks up the registration QR code in a DICT ICT Academy post on Facebook. A label in the corner counts the codes it found, and a button at the top right closes the scanner." }
+    ],
+    photos:[
+      "A simple QR Code Scanner by Lau: the extension's promo graphic",
+      "Scan Page for QRs: every QR code on the page gets its own link panel",
+      "The scanner finding a registration QR code in a Facebook post"
+    ]
+  },
+  {
+    /* a project with real pictures (in PROJECT_IMAGES at the bottom of this file): no "dur", so no video spot;
+       photos = a short caption per picture: the cover first, then one per documentation row.
+       date to be confirmed — while it's empty, no date is shown and it sorts last */
+    id:"galaxy-campus-creation-lab", title:"Samsung Galaxy Campus Creation Lab", date:"", category:"Graphic Design", logo:"samsung",
+    tagline:"STARBURST, a star-themed merch collection by Team Celestials (Team C) for Samsung Galaxy Campus Creation Lab: a glowing star keychain, a sticker sheet, a \"To the Stars\" phone case, a water bottle, a power bank, a lanyard, a notebook and a gift box.",
+    thumb:"tD",
+    docs:[
+      { h:"The team", t:"Team Celestials (Team C): ten Galaxy Campus ambassadors, Lau included, working together on Creation Lab." },
+      { h:"Meeting online", t:"The team met over Google Meet, everyone behind a Galaxy Campus Batch 2 virtual background." },
+      { h:"Presenting STARBURST", t:"The team on a video call with the Galaxy Campus Creation Lab hosts, all in matching STARBURST virtual backgrounds." }
+    ],
+    photos:[
+      "STARBURST product showcase by Team Celestials (Team C)",
+      "The Creation Lab team roster",
+      "Team Celestials meeting on Google Meet",
+      "Team Celestials presenting STARBURST on a video call"
+    ]
+  }
+];
+
+/* Gallery events.
+   id      → also the key of its pictures in GALLERY_IMAGES (the last <script> at the bottom of this file)
+   photos  → a short caption (alt text) per picture: the cover first, then the "More photos" in the order they appear
+   rows    → optional: how many photos go in each of the first rows of "More photos", e.g. [2] puts the first
+             two side by side, bigger; the rest are arranged automatically
+   logo    → optional: the organiser's logo shown on the card in place of the "L" (a name from ASSETS,
+             e.g. "globe" or "samsung"; see LOGO_NAMES)
+   links   → optional: buttons under the description that open in a new tab, e.g. a news article about the
+             event ({ label, url, icon, sub }: icon "news" = newspaper; sub = a smaller second line)
+   thumb   → colour shown only while an event has no pictures yet */
+const GALLERY = [
+  {
+    id:"art-in-the-park-2026", title:"Globe Telecom Art in the Park 2026 & Social Media 101 Workshop",
+    period:"Mar 13–15, 2026", date:"2026-03-15", category:"Event", thumb:"tC", logo:"globe",
+    summary:"Joined Globe's Social Media 101 Workshop at The Globe Tower in BGC as a Globe Student Ambassador, learning the digital storytelling skills for covering Art in the Park. Two days later, put them to work in the Globe Social Media Internship at Art in the Park 2026, the fair's 20th year, at Jaime Velasquez Park in Makati City.",
+    photos:[
+      "Lau and three fellow ambassadors holding their certificates at Globe's Social Media 101 Workshop",
+      "Lau with his Certificate of Participation at the Social Media 101 Workshop",
+      "Lau's Globe Student Ambassador ID for Art in the Park's 20th year",
+      "Sign congratulating the new Globe Student Ambassadors",
+      "Lau in the Globe × Art in the Park vest at the 20 years Art in the Park frame",
+      "Group photo of the Globe Student Ambassadors"
+    ]
+  },
+  {
+    id:"galaxy-campus-batch-2-graduation", title:"Samsung Galaxy Campus Batch 2 Graduation",
+    date:"2025-07-05", category:"Event", thumb:"tF", logo:"samsung",
+    rows:[2],   /* the whole-batch photo and Lau with his trophy share the first row, bigger */
+    summary:"Graduation night for Samsung's Galaxy Campus Batch 2 at the \"Trailblaze to Tomorrow\" wrap-up party at Conrad Hotel, Pasay City, closing out a year as a Galaxy Campus ambassador with the Top 3 award and a Certificate of Trailblazing Leadership.",
+    photos:[
+      "Galaxy Campus Batch 2 ambassadors on stage at the Trailblaze to Tomorrow wrap-up party",
+      "The whole Galaxy Campus Batch 2 at the Trailblaze to Tomorrow wrap-up party",
+      "Lau holding his Top 3 trophy and Certificate of Trailblazing Leadership",
+      "The Galaxy Campus Batch 2 Top 3 trophy, July 5, 2025, Conrad Hotel, Pasay City",
+      "Lau and fellow awardees showing their Galaxy Campus trophies",
+      "Batch 2 ambassadors in front of the Galaxy Campus screen",
+      "Ambassadors with their flowers and certificates under the ballroom chandelier"
+    ]
+  },
+  {
+    id:"galaxy-campus-connect-vietnam", title:"Samsung Galaxy Campus Connect (Vietnam)",
+    period:"Apr 2–4, 2025", date:"2025-04-04", category:"Travel", thumb:"tE", logo:"samsung",
+    summary:"Three days in Ho Chi Minh City for Galaxy Campus Connect, meeting fellow Galaxy Campus students at Hotel Grand Saigon under the theme \"New sights, new stories, one Galaxy\", with stops at the Independence Palace and the Saigon Opera House, a metro ride, big group dinners, conical hats, Galaxy Campus bears, and plenty of group photos.",
+    photos:[
+      "Lau chatting with fellow ambassadors at Galaxy Campus Connect",
+      "Galaxy Campus Connect group photo with the Vietnam, April 2–4, 2025 banner",
+      "A playful group shot on stage with the Galaxy Campus Connect banner",
+      "Ambassadors in conical hats at Hotel Grand Saigon",
+      "Lau with a Galaxy Campus bear and a Philippine flag",
+      "Lau joining a group selfie with Galaxy Campus students from Vietnam",
+      "Lau and fellow ambassadors with their gift bags",
+      "Lau showing snacks to fellow Galaxy Campus students",
+      "The group with the Galaxy Campus Connect banner outside the Independence Palace",
+      "Lau and friends outside the Saigon Opera House",
+      "Lau and friends at a metro station in front of a Galaxy S25 Ultra ad",
+      "Dinner with the Galaxy Campus group",
+      "The whole group at dinner in a restaurant during the trip",
+      "Another view of the group dinner"
+    ]
+  },
+  {
+    /* only the month is known, so the card shows "Aug 2025"; the date is just for sorting */
+    id:"samsung-digital-city-tour", title:"Samsung Digital City Tour (Korea)",
+    period:"Aug 2025", date:"2025-08-01", category:"Travel", thumb:"tB", logo:"samsung",
+    summary:"A visit to Samsung Digital City, Samsung Electronics' headquarters in Suwon, South Korea, with fellow Galaxy Campus Batch 2 ambassadors: a big-screen welcome, a session in the \"Change Everything\" conference hall, a stop at the Samsung Innovation Museum, a look around the eXperience Home at the CX Center, and plenty of photos with the Samsung sign.",
+    photos:[
+      "Galaxy Campus Batch 2 under the Welcome screen showing their names",
+      "Lau and friends at breakfast during the trip",
+      "Lau outside a Samsung building at Samsung Digital City",
+      "Galaxy Campus ambassadors in a Samsung conference hall with \"Change Everything\" on the screen",
+      "The group at the Samsung Innovation Museum (S/i/M)",
+      "The Galaxy Campus group behind the giant SAMSUNG letters",
+      "A tour of the eXperience Home at Samsung's CX Center in Suwon",
+      "Lau trying out a giant curved Samsung monitor turned vertical"
+    ]
+  },
+  {
+    id:"galaxy-campus-batch-2-kickoff", title:"Samsung Galaxy Campus Batch 2 Kickoff Party",
+    date:"2024-07-07", category:"Event", thumb:"tA", logo:"samsung",
+    summary:"The start of a year as a Samsung Galaxy Campus ambassador. At the Batch 2 kickoff party at Grand Hyatt Manila in Bonifacio Global City, the new ambassadors received their Certificates of Ambassadorship and gathered in their Galaxy Campus varsity jackets for the big batch photo, under the banner \"The new generation of Tech Trailblazers is here!\"",
+    links:[
+      { label:"Samsung unveils fresh wave of new Galaxy Campus Tech Trailblazers", sub:"INQUIRER.net · Jul 9, 2024",
+        url:"https://technology.inquirer.net/135693/samsung-unveils-fresh-wave-of-new-galaxy-campus-tech-trailblazers", icon:"news" }
+    ],
+    photos:[
+      "The whole Galaxy Campus Batch 2 in their varsity jackets",
+      "Registration outside the Taft Ballroom",
+      "The stage set for the Galaxy Campus Batch 2 Kick-off Party",
+      "Lau with his Certificate of Ambassadorship at the Galaxy Campus Batch 2 Kick-off Party",
+      "Lau's Certificate of Ambassadorship and Student Ambassador ID",
+      "Ambassadors on stage with the Samsung team",
+      "Batch 2 ambassadors in their Galaxy Campus jackets on stage",
+      "Lau and fellow ambassadors with props at the Tech Trailblazers photo wall",
+      "The Batch 2 group photo from another angle",
+      "Batch 2 ambassadors up close in their varsity jackets",
+      "The whole batch together in the hotel lobby",
+      "Ambassadors gathered in the hotel lobby",
+      "Lau and friends giving a thumbs-up at dinner",
+      "Lau and fellow ambassadors hanging out at The Peak"
+    ]
+  }
+];
+
+/* Certificates & achievements: one entry per certificate.
+   id     → also the key of its picture in CERT_IMAGES (the last <script> at the bottom of this file)
+   date   → used for sorting (YYYY-MM-DD); "period" is shown instead when the certificate names a term, not a day
+   credId, expiry, verify, skills → optional; leave them out and the popup simply hides that row */
+const CERTS = [
+  /* ---- Microsoft · CompTIA · Certiport · Lean Six Sigma ---- */
+  { id:"ms-azure-fundamentals", title:"Microsoft Certified: Azure Fundamentals", org:"Microsoft",
+    date:"2026-08-12", category:"Certification", field:"Cloud", credId:"A0A1E85FC3008E96",
+    desc:"Passed all requirements for the Microsoft Certified: Azure Fundamentals certification (certification number AY652B-720119)." },
+  { id:"certiport-its-networking", title:"Information Technology Specialist: Networking", org:"Certiport · Pearson VUE",
+    date:"2025-10-15", category:"Certification", field:"Networking", credId:"wnuvR-485p", expiry:"Oct 15, 2030",
+    verify:"https://verify.certiport.com",
+    desc:"Completed the certification requirements for the Information Technology Specialist (ITS) certification in Networking. The certificate is valid for five years from the date of issue." },
+  { id:"comptia-itf", title:"CompTIA IT Fundamentals (ITF+)", org:"CompTIA",
+    date:"2024-07-01", category:"Certification", field:"IT Support", credId:"4FKG8JFTPJ4Q1FW8",
+    verify:"https://verify.comptia.org",
+    desc:"Completed the requirements to be recognized as CompTIA IT Fundamentals (ITF+) certified. The credential ID below is the verification code for CompTIA's verification site." },
+  { id:"lss-yellow-belt", title:"Lean Six Sigma Yellow Belt Certification", org:"MF Operational Excellence",
+    date:"2025-10-20", category:"Certification", field:"Process Improvement", credId:"110117817",
+    desc:"Completed a 20-hour Lean Six Sigma training at the Yellow Belt level and demonstrated competence in the methodology by passing the final test. Signed by Prof. Dr. Marcelo Machado Fernandes, Lean Six Sigma Master Black Belt." },
+  { id:"lss-white-belt", title:"Lean Six Sigma White Belt Certification", org:"MF Operational Excellence",
+    date:"2025-10-20", category:"Certification", field:"Process Improvement", credId:"110117159",
+    desc:"Completed a 4-hour Lean Six Sigma training at the White Belt level and passed the final test. Signed by Prof. Dr. Marcelo Machado Fernandes, Lean Six Sigma Master Black Belt." },
+
+  /* ---- Online courses: Udacity · Google (Coursera) · NASA · Cisco ---- */
+  { id:"udacity-aws-ai-programmer", title:"Future AWS AI Programmer Nanodegree", org:"Udacity",
+    date:"2026-10-10", category:"Certificate", field:"AI",
+    verify:"https://www.udacity.com/certificate/e/cdda0102-900d-11f1-9883-47e94cb9dae4",
+    desc:"Verified certificate of Nanodegree program completion for the Future AWS AI Programmer program." },
+  { id:"udacity-aws-ai-challenge", title:"AWS AI Practitioner Challenge", org:"Udacity",
+    date:"2026-06-10", category:"Certificate", field:"AI",
+    verify:"https://www.udacity.com/certificate/e/f124389c-31c3-11f1-b0bc-77605eb28b26",
+    desc:"Verified certificate of course completion for the AWS AI Practitioner Challenge." },
+  { id:"google-networking", title:"The Bits and Bytes of Computer Networking", org:"Google · Coursera",
+    date:"2026-08-06", category:"Certificate", field:"Networking", credId:"2O1TDOU1KGXR",
+    verify:"https://coursera.org/verify/2O1TDOU1KGXR",
+    desc:"Completed this online course, authorized by Google and offered through Coursera." },
+  { id:"google-project-mgmt", title:"Foundations of Project Management", org:"Google · Coursera",
+    date:"2026-06-18", category:"Certificate", field:"Project Management", credId:"7RP8J2879CNI",
+    verify:"https://coursera.org/verify/7RP8J2879CNI",
+    desc:"Completed this online course, authorized by Google and offered through Coursera." },
+  { id:"google-tech-support", title:"Technical Support Fundamentals", org:"Google · Coursera",
+    date:"2026-05-09", category:"Certificate", field:"IT Support", credId:"6XO9BVHK3YN2",
+    verify:"https://coursera.org/verify/6XO9BVHK3YN2",
+    desc:"Completed this online course, authorized by Google and offered through Coursera." },
+  { id:"nasa-open-science-101", title:"Open Science 101", org:"NASA",
+    date:"2026-04-18", category:"Certificate", field:"Research",
+    desc:"Certificate of Achievement for completing NASA's Open Science 101 curriculum." },
+  { id:"nasa-open-science-essentials", title:"Open Science Essentials", org:"NASA",
+    date:"2026-02-25", category:"Certificate", field:"Research",
+    desc:"Certificate of Achievement for completing NASA's Open Science Essentials curriculum." },
+  { id:"cisco-js-essentials-1", title:"JavaScript Essentials 1", org:"Cisco Networking Academy",
+    date:"2024-06-25", category:"Certificate", field:"Web Development",
+    verify:"https://www.credly.com/go/nisUxaFY",
+    desc:"Statement of Achievement for completing the JavaScript Essentials 1 course, provided by Cisco Networking Academy in collaboration with the OpenEDG JS Institute." },
+
+  /* ---- Canva ---- */
+  { id:"canva-whole-class-webinar", title:"Bring the Whole Class In: Live and Collaborative Lessons with Canva", org:"Canva Philippines × Luke Beyond",
+    date:"2026-05-29", category:"Certificate", field:"EdTech",
+    desc:"Certificate of Participation for a 2-hour webinar by Canva Philippines and Luke Beyond Digital Learning Solutions." },
+  { id:"canva-ai-classroom", title:"AI in the Classroom", org:"Canva Design School",
+    date:"2025-09-28", category:"Certificate", field:"EdTech", credId:"16c43d",
+    desc:"Certificate of Completion for the AI in the Classroom course, equivalent to 1 hour of training." },
+  { id:"canva-teacher-essentials", title:"Teacher Essentials", org:"Canva Design School",
+    date:"2025-09-28", category:"Certificate", field:"EdTech", credId:"81a3f8",
+    desc:"Certificate of Completion for the Teacher Essentials course, equivalent to 1 hour of training." },
+  { id:"canva-essentials", title:"Canva Essentials", org:"Canva Design School",
+    date:"2025-09-28", category:"Certificate", field:"Graphic Design", credId:"1f3696",
+    desc:"Certificate of Completion for the Canva Essentials course, equivalent to 1 hour of training." },
+  { id:"canva-graphic-design", title:"Graphic Design Essentials", org:"Canva Design School",
+    date:"2025-09-28", category:"Certificate", field:"Graphic Design", credId:"b6c55f",
+    desc:"Certificate of Completion for the Graphic Design Essentials course, equivalent to 45 minutes of training." },
+
+  /* ---- DICT ---- */
+  { id:"dict-frontier-ai", title:"Frontier Tech Trends Webinar: AI for Smarter Businesses", org:"DICT",
+    date:"2026-05-25", category:"Certificate", field:"AI",
+    desc:"Certificate of Attendance from the DICT ICT Industry Development Bureau for active participation in the Frontier Tech Trends webinar." },
+  { id:"dict-vc-webinar", title:"From Ideas to Investment: VC Webinar for Startups", org:"DICT",
+    date:"2026-03-26", category:"Certificate", field:"Entrepreneurship",
+    desc:"Certificate of Participation for the DICT's venture capital webinar for startups, held via Zoom." },
+  { id:"dict-best-mobile-app", title:"Best Mobile Application", org:"DICT Region 3",
+    date:"2024-04-26", category:"Award", field:"Mobile Development",
+    desc:"Special award for exemplary performance in the Mobile Application Development Training Program (March 18 – April 3, 2024), given at Tech4Ed-DTC Dau, Mabalacat City." },
+  { id:"dict-mobile-dev", title:"Mobile Application Development Training Program", org:"DICT Region 3",
+    date:"2024-04-26", category:"Certificate", field:"Mobile Development",
+    desc:"Certificate of Completion for the 54-hour online training program held March 18 – April 3, 2024, in recognition of exemplary performance and completion of all requirements." },
+  { id:"dict-basic-web", title:"Basic Website Development", org:"DICT Region 3",
+    date:"2024-04-17", category:"Certificate", field:"Web Development",
+    desc:"Certificate of Participation for a 4-hour digital literacy training, run through the ILCDB Tech4ED Project and the DICT Pampanga Provincial Office." },
+  { id:"dict-cyber-hygiene", title:"Cybersecurity Awareness: Cyber Hygiene", org:"DICT Region 3",
+    date:"2024-03-15", category:"Certificate", field:"Cybersecurity",
+    desc:"Certificate of Participation for a seminar at the DICT Regional Roadshow 2024, “Bayang Digital ang Bagong Pilipinas”, held at National University Clark." },
+  { id:"dict-data-privacy", title:"Kabataang Digital: A Teen's Guide to Data Privacy Act and Online Safety", org:"DICT Region 3",
+    date:"2024-03-14", category:"Certificate", field:"Cybersecurity",
+    desc:"Certificate of Participation for the Kabataang Digital Campaign seminar at the DICT Regional Roadshow 2024, held at National University Clark." },
+
+  /* ---- Globe Telecom ---- */
+  { id:"globe-sm-internship", title:"Globe Social Media Internship — Art in the Park 2026", org:"Globe Telecom",
+    date:"2026-03-15", category:"Certificate", field:"Social Media",
+    desc:"Certificate for completing the Globe Social Media Internship at Art in the Park 2026, held at Jaime Velasquez Park, Makati City." },
+  { id:"globe-sm-101", title:"Globe Social Media 101 Workshop", org:"Globe Telecom",
+    date:"2026-03-13", category:"Certificate", field:"Social Media",
+    desc:"Certificate of Participation for the workshop that built the digital storytelling skills for the official coverage of Art in the Park. Given at The Globe Tower, BGC." },
+
+  /* ---- Samsung ---- */
+  { id:"samsung-trailblazing", title:"Certificate of Trailblazing Leadership — Galaxy Campus", org:"Samsung Philippines",
+    period:"S.Y. 2024–2025", date:"2025-07-05", category:"Award", field:"Student Ambassador",
+    desc:"For demonstrating exceptional leadership, creativity, and commitment as a Galaxy Campus Ambassador, empowering others and trailblazing the path for the next generation. Presented at the Galaxy Campus Batch 2 graduation on July 5, 2025, along with the Top 3 award." },
+  { id:"samsung-ambassadorship", title:"Galaxy Campus Ambassador — Certificate of Ambassadorship", org:"Samsung Philippines",
+    date:"2024-07-07", category:"Others", field:"Student Ambassador",
+    desc:"Welcomed into Samsung's Galaxy Campus ambassador program (Batch 2). Given at the Batch 2 kickoff party at Grand Hyatt Manila, Bonifacio Global City." },
+
+  /* ---- National University – Clark: Dean's List ---- */
+  { id:"nu-deans-list-2025-t2", title:"Dean's List Award — Second Honors (3.40 GWA)", org:"National University – Clark",
+    period:"2nd Term, AY 2024–25", date:"2025-04-01", category:"Award", field:"Academics",
+    desc:"Certificate of Academic Excellence for attaining a 3.40 GWA in the second term of academic year 2024–2025, BS Information Technology." },
+  { id:"nu-deans-list-2024-t1", title:"Dean's List Award — First Honors (3.50 GWA)", org:"National University – Clark",
+    period:"1st Term, AY 2024–25", date:"2024-12-01", category:"Award", field:"Academics",
+    desc:"Certificate of Academic Excellence for attaining a 3.50 GWA in the first term of academic year 2024–2025, BS Information Technology." },
+  { id:"nu-deans-list-2024-t3", title:"Dean's List Award — First Honors (3.61 GWA)", org:"National University – Clark",
+    period:"3rd Term, AY 2023–24", date:"2024-08-01", category:"Award", field:"Academics",
+    desc:"Certificate of Academic Excellence for attaining a 3.61 GWA in the third term of academic year 2023–2024, BS Information Technology." },
+  { id:"nu-deans-list-2024-t2", title:"Dean's List Award — First Honors (3.70 GWA)", org:"National University – Clark",
+    period:"2nd Term, AY 2023–24", date:"2024-04-01", category:"Award", field:"Academics",
+    desc:"Certificate of Academic Excellence for attaining a 3.70 GWA in the second term of academic year 2023–2024, BS Information Technology." },
+
+  /* ---- Holy Angel University ---- */
+  { id:"hau-resource-speaker", title:"Resource Speaker — Youth Spiritual Encounter Forum", org:"Holy Angel University",
+    date:"2025-03-10", category:"Others", field:"Social Media",
+    desc:"Certificate of Appreciation from HAU's Institute for Christian Formation and Social Integration for speaking on “The Role of the Social Media in the Formation of the Modern Youth.”" },
+  { id:"hau-cybersec-conference", title:"3rd Regional Cybersecurity Conference", org:"Holy Angel University · School of Computing",
+    date:"2025-02-07", category:"Certificate", field:"Cybersecurity",
+    desc:"Certificate of Attendance for the conference “Cybersecurity in the Age of A.I.: Navigating the Double-Edged Sword.”" },
+  { id:"hau-shs-diploma", title:"Senior High School Diploma — With Honors", org:"Holy Angel University",
+    date:"2023-05-30", category:"Others", field:"Academics",
+    desc:"Graduated from senior high school With Honors under the TVL – Information and Communication Technology strand." },
+  { id:"hau-high-honors-2023-s2", title:"Academic Excellence — With High Honors (2nd Sem, SY 2022–23)", org:"Holy Angel University",
+    date:"2023-05-31", category:"Award", field:"Academics",
+    desc:"Certificate of Academic Excellence, With High Honors, for the second semester of school year 2022–2023." },
+  { id:"hau-honors-2022-s1", title:"Academic Excellence — With Honors (1st Sem, SY 2022–23)", org:"Holy Angel University",
+    date:"2022-11-30", category:"Award", field:"Academics",
+    desc:"Certificate of Academic Excellence, With Honors, for the first semester of school year 2022–2023." },
+  { id:"hau-honors-2022-s2", title:"Academic Excellence — With Honors (2nd Sem, SY 2021–22)", org:"Holy Angel University",
+    date:"2022-05-13", category:"Award", field:"Academics",
+    desc:"Certificate of Academic Excellence, With Honors, for the second semester of school year 2021–2022." },
+  { id:"hau-honors-2021-s1", title:"Academic Excellence — With Honors (1st Sem, SY 2021–22)", org:"Holy Angel University",
+    date:"2021-12-17", category:"Award", field:"Academics",
+    desc:"Certificate of Academic Excellence, With Honors, for the first semester of school year 2021–2022." },
+  { id:"hau-jhs-completion", title:"Junior High School Certificate of Completion", org:"Holy Angel University",
+    date:"2021-05-14", category:"Others", field:"Academics",
+    desc:"Completed the junior high school course prescribed by the Department of Education for basic education." },
+
+  /* ---- TESDA Online Program (Computer Systems Servicing courses) ---- */
+  { id:"tesda-computer-networks", title:"Setting Up Computer Networks", org:"TESDA Online Program",
+    date:"2023-04-11", category:"Certificate", field:"IT Support", credId:"QPqfAYFTpX",
+    desc:"Certificate of Completion for this TESDA Online Program course, one of the Computer Systems Servicing (CSS) courses." },
+  { id:"tesda-computer-servers", title:"Setting Up Computer Servers", org:"TESDA Online Program",
+    date:"2023-04-11", category:"Certificate", field:"IT Support", credId:"ewDBMMgjNN",
+    desc:"Certificate of Completion for this TESDA Online Program course, one of the Computer Systems Servicing (CSS) courses." },
+  { id:"tesda-installing", title:"Installing and Configuring Computer Systems", org:"TESDA Online Program",
+    date:"2023-03-28", category:"Certificate", field:"IT Support", credId:"Ul4jMgda37",
+    desc:"Certificate of Completion for this TESDA Online Program course, one of the Computer Systems Servicing (CSS) courses." },
+  { id:"tesda-maintaining", title:"Maintaining Computer Systems and Networks", org:"TESDA Online Program",
+    date:"2023-03-28", category:"Certificate", field:"IT Support", credId:"BaPn33KPCB",
+    desc:"Certificate of Completion for this TESDA Online Program course, one of the Computer Systems Servicing (CSS) courses." },
+  { id:"tesda-intro-css", title:"Introduction to CSS (Computer Systems Servicing)", org:"TESDA Online Program",
+    date:"2023-03-28", category:"Certificate", field:"IT Support", credId:"Acb4sE99kq",
+    desc:"Certificate of Completion for the TESDA Online Program's introductory Computer Systems Servicing (CSS) course." }
+];
+
+/* ============================================================
+   HERO — circular profile photo(s).
+   Add more photos to PFP_PHOTOS (file paths like "photos/me-2.jpg"
+   work once the site is hosted) and the circle starts fading
+   between them every 3 seconds. With no photos it shows the
+   10 placeholder slides.
+   ============================================================ */
+const PFP_PHOTOS = [
+  /* 1: 2x2 photo */
+  "assets/profile/photo-1.jpg",
+  /* 2: with the neck chain */
+  "assets/profile/photo-2.jpg",
+  /* 3: at Samsung */
+  "assets/profile/photo-3.jpg",
+  /* 4: pink background */
+  "assets/profile/photo-4.jpg"
+];
+(function buildPfp(){
+  const host = document.getElementById("pfp");
+  if(!host) return;
+  const flavors = ["tA","tB","tC","tD","tE","tF"];
+  const photos = PFP_PHOTOS.filter(Boolean);
+  let html = "";
+  if(photos.length){
+    html = photos.map(src => `<div class="pfp-slide"><img src="${src}" alt="Laurence Asencio"></div>`).join("");
+  } else {
+    for(let i=1;i<=10;i++) html += `<div class="pfp-slide ${flavors[i%flavors.length]}">pfp ${i}</div>`;
+  }
+  host.innerHTML = html;
+  const slides = host.querySelectorAll(".pfp-slide");
+  let cur = 0;
+  slides[0].classList.add("active");
+  if(slides.length < 2) return;
+  setInterval(()=>{
+    slides[cur].classList.remove("active");
+    cur = (cur+1) % slides.length;
+    slides[cur].classList.add("active");
+  }, 3000);
+})();
+
+/* ============================================================
+   ASSETS — logos & icons, kept as files in assets/logos.
+   Used by every <img data-asset="..."> on the page.
+   ============================================================ */
+const ASSETS = {
+  linkedin: "assets/logos/linkedin.png",
+  github: "assets/logos/github.png",
+  facebook: "assets/logos/facebook.png",
+  tiktok: "assets/logos/tiktok.png",
+  globe: "assets/logos/globe.png",
+  samsung: "assets/logos/samsung.png",
+  nu: "assets/logos/nu.png",
+  hau: "assets/logos/hau.png",
+  vscode: "assets/logos/vscode.png",
+  androidstudio: "assets/logos/androidstudio.png",
+  javascript: "assets/logos/javascript.png",
+  flutter: "assets/logos/flutter.png",
+  kotlin: "assets/logos/kotlin.png",
+  canva: "assets/logos/canva.png",
+  procreate: "assets/logos/procreate.png",
+  capcut: "assets/logos/capcut.png",
+  /* card logos: projects, gallery events and certificates (see LOGO_NAMES and CERT_LOGOS) */
+  vinuni: "assets/logos/vinuni.webp",
+  udacity: "assets/logos/udacity.webp",
+  microsoft: "assets/logos/microsoft.webp",
+  google: "assets/logos/google.webp",
+  dict: "assets/logos/dict.webp",
+  nasa: "assets/logos/nasa.webp",
+  mf: "assets/logos/mf.webp",
+  certiport: "assets/logos/certiport.webp",
+  hausoc: "assets/logos/hausoc.webp",
+  comptia: "assets/logos/comptia.webp",
+  cisco: "assets/logos/cisco.webp",
+  tesda: "assets/logos/tesda.webp"
+};
+/* fills every <img data-asset="..."> under root (popups call it again for logos they add) */
+const fillAssets = (root = document) => root.querySelectorAll("img[data-asset]").forEach(img => {
+  const src = ASSETS[img.dataset.asset];
+  if(src) img.src = src;
+});
+fillAssets();
+
+/* ============================================================
+   DARK MODE — the button at the right end of the top bar.
+   Remembers the choice in this browser; the script at the top of <head> applies it on the next visit.
+   ============================================================ */
+(function themeToggle(){
+  const root = document.documentElement, btn = document.getElementById("themeToggle");
+  if(!btn) return;
+  const isDark = () => root.getAttribute("data-theme") === "dark";
+  const sync = () => {
+    btn.setAttribute("aria-pressed", String(isDark()));
+    btn.setAttribute("aria-label", isDark() ? "Switch to light mode" : "Switch to dark mode");
+    btn.title = isDark() ? "Light mode" : "Dark mode";
+  };
+  let fadeTimer;
+  btn.addEventListener("click", () => {
+    if(!matchMedia("(prefers-reduced-motion: reduce)").matches){
+      root.classList.add("theme-anim");
+      clearTimeout(fadeTimer);
+      fadeTimer = setTimeout(() => root.classList.remove("theme-anim"), 450);
+    }
+    if(isDark()) root.removeAttribute("data-theme"); else root.setAttribute("data-theme", "dark");
+    try { localStorage.setItem("lau-theme", isDark() ? "dark" : "light"); } catch(e){}
+    sync();
+  });
+  sync();
+})();
+
+/* ============================================================
+   ABOUT — focus radar chart (5 axes, Life maxed at 100)
+   Edit the `value` numbers below (0–100) to tune your stats.
+   ============================================================ */
+(function buildRadar(){
+  const host = document.getElementById("radarChart");
+  if(!host) return;
+  const STATS = [
+    {label:"Web Development",  value:95},
+    {label:"Mobile Development",   value:91},
+    {label:"Graphics Design", value:88},
+    {label:"Marketing",         value:50},
+    {label:"Research",             value:93}
+  ];
+  const W=400, H=340, cx=W/2, cy=H/2+6, R=112, N=STATS.length;
+  const pt = (i,r)=>{
+    const a = -Math.PI/2 + i*(2*Math.PI/N);
+    return [cx + r*Math.cos(a), cy + r*Math.sin(a)];
+  };
+  const poly = pts => pts.map(p=>p.map(n=>n.toFixed(1)).join(",")).join(" ");
+
+  /* grid rings (25/50/75/100) + axis spokes */
+  let grid = "";
+  [0.25,0.5,0.75,1].forEach(f=>{
+    grid += `<polygon class="r-grid" points="${poly(STATS.map((_,i)=>pt(i,R*f)))}" fill="none" stroke="rgba(20,20,20,.28)" stroke-width="1" stroke-dasharray="${f===1?'none':'3 4'}"/>`;
+  });
+  let spokes = STATS.map((_,i)=>{
+    const [x,y]=pt(i,R);
+    return `<line class="r-grid" x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="rgba(20,20,20,.28)" stroke-width="1"/>`;
+  }).join("");
+
+  /* value polygon */
+  const valuePts = STATS.map((s,i)=>pt(i,R*s.value/100));
+  const shape = `<polygon points="${poly(valuePts)}" fill="rgba(160,107,255,.42)" stroke="#7C3BFF" stroke-width="2.5" stroke-linejoin="round"/>`;
+  const dots = valuePts.map(([x,y])=>`<circle class="r-dot" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="#7C3BFF" stroke="#141414" stroke-width="1.5"/>`).join("");
+
+  /* labels */
+  const labels = STATS.map((s,i)=>{
+    const [x,y]=pt(i,R+26);
+    let anchor="middle";
+    if(x < cx-12) anchor="end"; else if(x > cx+12) anchor="start";
+    const maxed = s.value>=100 ? ` <tspan class="r-val" fill="#7C3BFF">★</tspan>` : "";
+    return `<text class="r-label" x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="${anchor}" font-family="'IBM Plex Mono',monospace" font-size="11" font-weight="600" fill="#141414">${s.label}${maxed}
+      <tspan class="r-val" x="${x.toFixed(1)}" dy="13" font-size="10.5" fill="#7C3BFF" font-weight="600">${s.value>=100?"MAX":s.value+" / 100"}</tspan></text>`;
+  }).join("");
+
+  /* 30px of side padding so long labels ("Graphic Design") aren't clipped */
+  host.innerHTML = `<svg viewBox="-30 0 ${W+60} ${H}" role="img" aria-label="Focus stats radar chart: Web Development 95, Mobile Development 91, Graphics Design 89, Marketing 83, Research 93">
+    ${grid}${spokes}<g class="radar-val" style="transform-origin:${cx}px ${cy}px;">${shape}${dots}</g>${labels}
+  </svg>`;
+})();
+
+/* ============================================================
+   XP (AGE) — worked out from the birthday, so it ticks up by itself every April 26
+   ============================================================ */
+(function ageXP(){
+  const BIRTHDAY = { year:2004, month:4, day:26 };   /* April 26, 2004 */
+  const now = new Date();
+  const m = now.getMonth() + 1, d = now.getDate();
+  let age = now.getFullYear() - BIRTHDAY.year;
+  if(m < BIRTHDAY.month || (m === BIRTHDAY.month && d < BIRTHDAY.day)) age--;
+  const val = document.getElementById("ageVal"), fill = document.getElementById("xpFill");
+  if(val)  val.textContent = age;
+  if(fill) fill.style.width = Math.min(age, 100) + "%";   /* the bar shows age out of 100 */
+})();
+
+/* ============================================================
+   SCROLL-IN ANIMATIONS — anything marked data-rv pops into place the first
+   time it scrolls into view (About, Projects, Gallery, Certificates).
+   Things that arrive together pop one after another. The styles are in the
+   "SCROLL-IN ANIMATIONS" part of the <style> block.
+   ============================================================ */
+const reveal = (() => {
+  const root = document.documentElement;
+  window.__rvReady = true;                      /* tells the <head> script the animations are running */
+  if(!root.classList.contains("rv-on")) return { watch(){}, replay(){} };
+
+  const POP_WAIT = 500;                         /* windows and cards wait 0.5s once in view, so the pop-in is easy to see */
+  const STEP = 90, MAX_STAGGER = 540;           /* ms between things that arrive together */
+
+  /* a group (the certificate shelf): the children you can see pop in one by one, the rest just appear */
+  function playGroup(group, base = 0){
+    const box = group.getBoundingClientRect();
+    let n = 0;
+    [...group.children].forEach(kid => {
+      const r = kid.getBoundingClientRect();
+      const inView = r.right > box.left + 4 && r.left < box.right - 4;
+      kid.classList.toggle("rv-kid", inView);
+      if(inView) kid.style.setProperty("--rv-delay", (base + Math.min(n++ * STEP, MAX_STAGGER)) + "ms");
+    });
+    group.classList.add("rv-in");
+  }
+
+  const io = new IntersectionObserver(entries => {
+    entries.filter(e => e.isIntersecting)
+      .sort((a, b) => (a.boundingClientRect.top - b.boundingClientRect.top) || (a.boundingClientRect.left - b.boundingClientRect.left))
+      .forEach((e, i) => {
+        const el = e.target;
+        /* headings and filter bars slide in straight away; windows and cards wait half a second, then pop
+           (cards redrawn by a filter change pop straight away) */
+        const wait = (el.dataset.rv === "up" || el.rvQuick) ? 0 : POP_WAIT;
+        const delay = wait + Math.min(i * STEP, MAX_STAGGER);
+        io.unobserve(el);                        /* each thing animates once */
+        if(el.dataset.rv === "group") return playGroup(el, delay);
+        el.style.setProperty("--rv-delay", delay + "ms");
+        el.classList.add("rv-in");
+      });
+  }, { rootMargin: "0px 0px -10% 0px" });      /* starts once it's a little way into the screen */
+
+  /* toolkit icons pop in one after another */
+  document.querySelectorAll(".tools-grid").forEach(g => [...g.children].forEach((t, i) => t.style.setProperty("--i", i)));
+  /* printing shows everything */
+  addEventListener("beforeprint", () => root.classList.remove("rv-on"));
+
+  const api = {
+    /* start watching everything marked data-rv inside scope that hasn't animated yet
+       (quick = redrawn by a filter change, so no wait) */
+    watch(scope = document, quick = false){
+      scope.querySelectorAll("[data-rv]:not(.rv-in)").forEach(el => { el.rvQuick = quick; io.observe(el); });
+    },
+    /* a group that was redrawn (the certificate filters): pop its cards in again if it's already shown */
+    replay(group){ if(group.classList.contains("rv-in")) playGroup(group); }
+  };
+  api.watch();
+  return api;
+})();
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+const $ = s => document.querySelector(s);
+const fmtDate = iso => new Date(iso + "T00:00:00").toLocaleDateString("en-US",{year:"numeric",month:"short",day:"numeric"});
+/* display date: the "period" text if given, else the full date, else nothing */
+const when = item => item.period || (item.date ? fmtDate(item.date) : "");
+
+/* text that goes inside an HTML attribute (alt="...") */
+const attr = s => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+
+/* gallery and project pictures live in window.GALLERY_IMAGES and window.PROJECT_IMAGES
+   (the last <script>s in this file), looked up by the event's or project's id:
+   { id: { thumb: card picture, cover: top of the popup, full?: whole cover for the full-screen viewer,
+           more: [{ w, h, src }] — a gallery event's "More photos", or a project's documentation photos } } */
+const galleryPhotos = id => (window.GALLERY_IMAGES || {})[id] || (window.PROJECT_IMAGES || {})[id];
+function fillGalleryImages(root){
+  root.querySelectorAll("img[data-gal]").forEach(img => {
+    const set = galleryPhotos(img.dataset.gal);
+    if(!set) return;
+    const which = img.dataset.which;
+    const src = which === "thumb" ? set.thumb : which === "cover" ? set.cover : (set.more[+which] || {}).src;
+    if(src) img.src = src;
+  });
+}
+
+/* "More photos": split the photos into rows that each fill the width at about the same height,
+   keeping every photo's own shape (nothing is cropped).
+   An event's "rows" setting (e.g. rows:[2]) fixes how many photos go in its first rows;
+   fewer photos in a row = bigger photos. */
+function layoutPhotoRows(box){
+  if(!box) return;
+  const figs = [...box.querySelectorAll(".gm-photo")];
+  box.replaceChildren(...figs);                                   /* undo an earlier layout */
+  const W = box.clientWidth, GAP = 12, TARGET = W < 520 ? 160 : 280, MAX = TARGET * 1.35;
+  const ar = figs.map(f => +f.dataset.ar);
+  const sum = (i, j) => ar.slice(i, j).reduce((a, b) => a + b, 0);
+  const height = (i, j) => (W - GAP * (j - i - 1)) / sum(i, j);   /* height of a full-width row of photos i..j-1 */
+
+  /* the fixed rows come first (on phones, at most 2 photos side by side) */
+  const rows = [];
+  let start = 0;
+  (box.dataset.rows || "").split(",").map(Number).filter(n => n > 0).forEach(n => {
+    if(start >= figs.length) return;
+    const end = Math.min(start + (W < 520 ? Math.min(n, 2) : n), figs.length);
+    rows.push([start, end]);
+    start = end;
+  });
+  /* the rest are arranged automatically: best[j] = best layout of photos start..j-1,
+     where a row costs more the further its height is from TARGET */
+  const best = [], cut = [];
+  best[start] = 0;
+  for(let j = start + 1; j <= figs.length; j++){
+    best[j] = Infinity;
+    for(let i = start; i < j; i++){
+      const cost = best[i] + Math.log(height(i, j) / TARGET) ** 2;
+      if(cost < best[j]){ best[j] = cost; cut[j] = i; }
+    }
+  }
+  const autoRows = [];
+  for(let j = figs.length; j > start; j = cut[j]) autoRows.unshift([cut[j], j]);
+  rows.push(...autoRows);
+  box.replaceChildren(...rows.map(([i, j]) => {
+    const row = document.createElement("div");
+    row.className = "gm-row";
+    const h = Math.min(height(i, j), MAX);                        /* a short last row doesn't blow up */
+    row.style.maxWidth = (h * sum(i, j) + GAP * (j - i - 1)) + "px";
+    figs.slice(i, j).forEach((f, k) => { f.style.flex = `${ar[i + k]} 1 0`; f.style.aspectRatio = ar[i + k]; row.append(f); });
+    return row;
+  }));
+}
+
+/* LOGOS ON THE CARDS: the little square next to a card's title shows a logo from ASSETS instead of the
+   "L" (projects, gallery events) or the "✓" (certificates).
+   - projects and gallery events: set logo:"samsung" (any name from ASSETS) on the item;
+     LOGO_NAMES gives the name that shows when you hover the logo
+   - certificates: matched by their "org" in CERT_LOGOS (a certificate can also set its own logo:"...")
+   Logos in FULL_BLEED have their own coloured square, so they fill the whole tile. */
+const LOGO_NAMES = { globe:"Globe Telecom", samsung:"Samsung", vinuni:"VinUniversity" };
+const CERT_LOGOS = {
+  "Holy Angel University":"hau", "Holy Angel University · School of Computing":"hausoc",
+  "National University – Clark":"nu", "DICT":"dict", "DICT Region 3":"dict", "TESDA Online Program":"tesda",
+  "Canva Design School":"canva", "Canva Philippines × Luke Beyond":"canva", "Google · Coursera":"google",
+  "MF Operational Excellence":"mf", "Udacity":"udacity", "NASA":"nasa", "Globe Telecom":"globe",
+  "Samsung Philippines":"samsung", "Microsoft":"microsoft", "Certiport · Pearson VUE":"certiport",
+  "CompTIA":"comptia", "Cisco Networking Academy":"cisco"
+};
+const FULL_BLEED = new Set(["udacity", "comptia"]);
+const avatarHTML = (key, name, fallback) => key && ASSETS[key]
+  ? `<span class="avatar logo${FULL_BLEED.has(key) ? " fill" : ""}"${name ? ` title="${attr(name)}"` : ""}><img data-asset="${key}" alt=""></span>`
+  : `<span class="avatar">${fallback}</span>`;
+
+function cardHTML(item, kind){
+  const isGal = kind === "gallery";
+  const photo = galleryPhotos(item.id);
+  const hasVideo = !isGal && item.dur;            /* projects with a video show its length and a ▶ */
+  return `
+    <button class="yt-card" data-rv data-kind="${kind}" data-id="${item.id}" aria-haspopup="dialog">
+      <div class="thumb ${item.thumb}${isGal ? " square" : ""}">
+        ${photo
+          ? `<img class="thumb-photo" data-gal="${item.id}" data-which="thumb" alt="${attr(item.title)}" decoding="async">`
+          : `<span class="thumb-label">${item.title}</span>`}
+        ${hasVideo ? `<span class="dur">${item.dur}</span>` : ""}
+        <span class="play-hint"><span>${hasVideo ? "▶" : "⤢"}</span></span>
+      </div>
+      <div class="card-meta">
+        ${avatarHTML(item.logo, LOGO_NAMES[item.logo], "L")}
+        <div>
+          <h3>${item.title}</h3>
+          <div class="sub"><span class="cat-badge">${item.category}</span>${when(item) ? `<span>${when(item)}</span>` : ""}</div>
+        </div>
+      </div>
+    </button>`;
+}
+
+/* certificate pictures live in window.CERT_IMAGES (the last <script> in this file):
+   { id: { thumb: "small image for the shelf", full: "large image for the popup" } } */
+const certImage = (id, size) => ((window.CERT_IMAGES || {})[id] || {})[size];
+const issuedText = c => when(c) ? `${c.category === "Award" ? "Awarded" : "Issued"} ${when(c)}` : "";
+
+/* the images are filled in after the markup is placed (see fillCertImages),
+   so the long image data never has to go through innerHTML */
+function fillCertImages(root){
+  root.querySelectorAll("img[data-cert]").forEach(img => {
+    const src = certImage(img.dataset.cert, img.dataset.size);
+    if(src) img.src = src;
+  });
+}
+
+function certPlaceholder(c, big){
+  return `
+    <div class="cert-frame"${big ? ` style="width:62%;min-height:220px;"` : ""}>
+      <span class="ribbon"${big ? ` style="font-size:30px;"` : ""}>🏅</span>
+      <b${big ? ` style="font-size:14px;"` : ""}>${c.title}</b>
+      <small>${c.org}</small>
+    </div>`;
+}
+
+function certCardHTML(c){
+  const pic = certImage(c.id, "thumb")
+    ? `<span class="cert-mat"><img class="cert-img" data-cert="${c.id}" data-size="thumb" alt="${c.title} certificate" decoding="async"></span>`
+    : certPlaceholder(c, false);
+  return `
+    <button class="yt-card" data-kind="cert" data-id="${c.id}" aria-haspopup="dialog">
+      <div class="thumb cert-thumb">
+        ${pic}
+        <span class="play-hint"><span>⤢</span></span>
+      </div>
+      <div class="card-meta">
+        ${avatarHTML(c.logo || CERT_LOGOS[c.org], c.org, "✓")}
+        <div class="cert-meta-text">
+          <h3>${c.title}</h3>
+          <div class="cert-org">${c.org}</div>
+          <div class="sub"><span class="cat-badge">${c.category}</span><span class="cat-badge">${c.field}</span>${issuedText(c) ? `<span>${issuedText(c)}</span>` : ""}</div>
+        </div>
+      </div>
+    </button>`;
+}
+
+/* ============================================================
+   RENDER GRIDS (with sort + filter)
+   ============================================================ */
+function renderGrid(data, gridSel, sortSel, filterSel, countSel, kind, quick = false){
+  const sort = $(sortSel).value, filter = $(filterSel).value;
+  let list = [...data];
+  if(filter !== "all") list = list.filter(i => i.category === filter);
+  list.sort((a,b)=> sort==="latest" ? b.date.localeCompare(a.date) : a.date.localeCompare(b.date));
+  $(gridSel).innerHTML = list.length
+    ? list.map(i=>cardHTML(i,kind)).join("")
+    : `<p class="mono" style="grid-column:1/-1;font-size:13px;">No items in this category yet — check back soon!</p>`;
+  fillGalleryImages($(gridSel));     /* gallery card photos */
+  fillAssets($(gridSel));            /* logos on the cards */
+  reveal.watch($(gridSel), quick);   /* new cards pop in as they come into view */
+  $(countSel).textContent = list.length + " item" + (list.length===1?"":"s");
+}
+
+const drawProjects = (quick=false)=>renderGrid(PROJECTS,"#projGrid","#projSort","#projFilter","#projCount","project",quick);
+const drawGallery  = (quick=false)=>renderGrid(GALLERY,"#galGrid","#galSort","#galFilter","#galCount","gallery",quick);
+
+/* a filter change redraws the cards; they pop straight back in (no wait) */
+["#projSort","#projFilter"].forEach(s=>$(s).addEventListener("change",()=>drawProjects(true)));
+["#galSort","#galFilter"].forEach(s=>$(s).addEventListener("change",()=>drawGallery(true)));
+/* projects and gallery are drawn once the whole file has loaded, because their pictures come after this script */
+document.addEventListener("DOMContentLoaded", () => { drawProjects(); drawGallery(); });
+
+/* certificates strip — sort + category/field filters */
+(function initCertFilters(){
+  /* build the field dropdown from whatever fields exist in CERTS */
+  const fieldSel = $("#certFieldFilter");
+  [...new Set(CERTS.map(c=>c.field))].sort().forEach(f=>{
+    fieldSel.insertAdjacentHTML("beforeend", `<option value="${f}">${f}</option>`);
+  });
+})();
+
+function drawCerts(){
+  const sort = $("#certSort").value,
+        cat  = $("#certCatFilter").value,
+        field= $("#certFieldFilter").value;
+  let list = [...CERTS];
+  if(cat   !== "all") list = list.filter(c => c.category === cat);
+  if(field !== "all") list = list.filter(c => c.field === field);
+  list.sort((a,b)=> sort==="latest" ? b.date.localeCompare(a.date) : a.date.localeCompare(b.date));
+  $("#certStrip").innerHTML = list.length
+    ? list.map(certCardHTML).join("")
+    : `<p class="mono" style="font-size:13px;padding:20px 4px;">No certificates match this filter yet — check back soon!</p>`;
+  fillCertImages($("#certStrip"));
+  fillAssets($("#certStrip"));      /* issuers' logos */
+  $("#certCount").textContent = list.length + " item" + (list.length===1?"":"s");
+  $("#certStrip").scrollTo({left:0});
+  reveal.replay($("#certStrip"));   /* after a filter change, the cards pop back in */
+}
+["#certSort","#certCatFilter","#certFieldFilter"].forEach(s=>$(s).addEventListener("change",drawCerts));
+/* drawn once the whole file has loaded, because the certificate images come after this script */
+document.addEventListener("DOMContentLoaded", drawCerts);
+
+/* the arrows move about one screenful of cards at a time */
+const certStep = () => Math.max(300, $("#certStrip").clientWidth - 80);
+$("#certPrev").addEventListener("click",()=> $("#certStrip").scrollBy({left:-certStep(),behavior:"smooth"}));
+$("#certNext").addEventListener("click",()=> $("#certStrip").scrollBy({left: certStep(),behavior:"smooth"}));
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+const overlay = $("#overlay"), modalBody = $("#modalBody"), modalTitle = $("#modalWinTitle");
+let lastFocus = null;
+
+function openModal(html, winTitle){
+  modalTitle.textContent = winTitle;
+  modalBody.innerHTML = html;
+  overlay.classList.add("open");
+  document.body.style.overflow = "hidden";
+  lastFocus = document.activeElement;
+  $("#modalClose").focus();
+}
+function closeModal(){
+  overlay.classList.remove("open");
+  document.body.style.overflow = "";
+  modalBody.innerHTML = "";
+  if(lastFocus) lastFocus.focus();
+}
+$("#modalClose").addEventListener("click", closeModal);
+overlay.addEventListener("click", e => { if(e.target === overlay) closeModal(); });
+/* ============================================================
+   PHOTO VIEWER — click a photo in a gallery popup to see it full screen.
+   ← / → (the buttons, the keyboard or a swipe) move through that event's photos;
+   Esc, ✕ close or a click outside the photo closes it and goes back to the popup.
+   ============================================================ */
+const lightbox = $("#lightbox"), lbImg = $("#lbImg"), lbCap = $("#lbCap"), lbCount = $("#lbCount");
+let lbPhotos = [], lbIndex = 0, lbReturnTo = null;
+const lightboxOpen = () => !lightbox.hidden;
+
+/* the cover (uncropped when there is a full version) followed by the "More photos" */
+function galleryPhotoList(item){
+  const set = galleryPhotos(item.id), caps = item.photos || [];
+  if(!set) return [];
+  return [{ src: set.full || set.cover, cap: caps[0] || item.title },
+          ...set.more.map((p, i) => ({ src: p.src, cap: caps[i + 1] || item.title }))];
+}
+function showPhoto(i, dir = 0){
+  lbIndex = (i + lbPhotos.length) % lbPhotos.length;     /* wraps around at either end */
+  const p = lbPhotos[lbIndex];
+  lbImg.src = p.src; lbImg.alt = p.cap;
+  lbCap.textContent = p.cap;
+  lbCount.textContent = `${lbIndex + 1} / ${lbPhotos.length}`;
+  if(lbImg.animate && !matchMedia("(prefers-reduced-motion: reduce)").matches){
+    lbImg.animate(dir
+      ? [{ opacity: 0, transform: `translateX(${dir * 46}px)` }, { opacity: 1, transform: "none" }]
+      : [{ opacity: 0, transform: "scale(.94)" }, { opacity: 1, transform: "none" }],
+      { duration: 300, easing: "cubic-bezier(.2,.8,.3,1)" });
+  }
+}
+function openLightbox(item, i, from){
+  lbPhotos = galleryPhotoList(item);
+  if(!lbPhotos.length) return;
+  lbReturnTo = from;
+  lightbox.classList.toggle("single", lbPhotos.length < 2);
+  lightbox.hidden = false;
+  showPhoto(i);
+  $("#lbClose").focus();
+}
+function closeLightbox(){
+  lightbox.hidden = true;
+  lbImg.removeAttribute("src");
+  if(lbReturnTo) lbReturnTo.focus();
+}
+$("#lbPrev").addEventListener("click", () => showPhoto(lbIndex - 1, -1));
+$("#lbNext").addEventListener("click", () => showPhoto(lbIndex + 1, 1));
+$("#lbClose").addEventListener("click", closeLightbox);
+lightbox.addEventListener("click", e => { if(e.target === lightbox || e.target.classList.contains("lb-stage")) closeLightbox(); });
+/* swipe left / right on phones */
+let lbTouchX = null;
+lightbox.addEventListener("touchstart", e => { lbTouchX = e.touches[0].clientX; }, { passive: true });
+lightbox.addEventListener("touchend", e => {
+  if(lbTouchX === null) return;
+  const dx = e.changedTouches[0].clientX - lbTouchX;
+  lbTouchX = null;
+  if(Math.abs(dx) > 45 && lbPhotos.length > 1) showPhoto(lbIndex + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1);
+});
+/* photos in a gallery popup open the viewer */
+modalBody.addEventListener("click", e => {
+  const photo = e.target.closest(".gal-zoom");
+  if(!photo) return;
+  const item = [...GALLERY, ...PROJECTS].find(g => g.id === photo.dataset.event);
+  if(item) openLightbox(item, +photo.dataset.lb, photo);
+});
+
+document.addEventListener("keydown", e => {
+  if(lightboxOpen()){
+    if(e.key === "Escape") closeLightbox();
+    else if(e.key === "ArrowRight" && lbPhotos.length > 1) showPhoto(lbIndex + 1, 1);
+    else if(e.key === "ArrowLeft" && lbPhotos.length > 1) showPhoto(lbIndex - 1, -1);
+    else if(e.key === "Tab"){                              /* keep keyboard focus inside the viewer */
+      const btns = [...lightbox.querySelectorAll("button")].filter(b => b.offsetParent !== null);
+      const at = btns.indexOf(document.activeElement);
+      e.preventDefault();
+      btns[(at + (e.shiftKey ? -1 : 1) + btns.length) % btns.length].focus();
+    }
+    return;
+  }
+  if(e.key === "Escape" && overlay.classList.contains("open")) closeModal();
+});
+/* if the window is resized while a gallery popup is open, re-flow its "More photos" rows */
+let photoRowsTimer;
+addEventListener("resize", () => {
+  clearTimeout(photoRowsTimer);
+  photoRowsTimer = setTimeout(() => layoutPhotoRows(modalBody.querySelector(".gal-more")), 150);
+});
+
+/* link buttons that open in a new tab (e.g. Chrome Web Store, GitHub, a news article), used in project and
+   gallery popups: { label, url, icon, sub }. The first one is purple, the rest white; "sub" adds a smaller
+   second line (like the site and date of an article). */
+const LINK_ICONS = {
+  store: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>`,
+  github: `<img data-asset="github" alt="">`,
+  news: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 20h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v12a2 2 0 0 1-2 2z"/><path d="M5 20a2 2 0 0 1-2-2v-7a1.5 1.5 0 0 1 1.5-1.5H7"/><path d="M10.5 7.5h6.5V11h-6.5zM10.5 14h6.5M10.5 17h4"/></svg>`
+};
+function linkRowHTML(item){
+  if(!(item.links || []).length) return "";
+  return `
+    <div class="link-row">${item.links.map((l, i) => `
+      <a class="proj-link${i === 0 ? " primary" : ""}" href="${attr(l.url)}" target="_blank" rel="noopener noreferrer">
+        <span class="pl-ico">${LINK_ICONS[l.icon] || "↗"}</span><span class="pl-txt">${l.label}${l.sub ? `<small>${l.sub}</small>` : ""}</span><span class="pl-go" aria-hidden="true">↗</span>
+      </a>`).join("")}
+    </div>`;
+}
+
+function projectModalHTML(item){
+  const set = galleryPhotos(item.id);
+  const alt = i => attr((item.photos || [])[i] || item.title);
+  /* pictures are buttons that open the full-screen viewer at that picture (data-lb = its position) */
+  const zoom = i => `data-event="${item.id}" data-lb="${i}" aria-label="View full screen: ${alt(i)}"`;
+  const docRows = item.docs.map((d,i)=>{
+    const p = set && set.more[i];
+    const photo = p
+      ? `<button type="button" class="doc-photo has-photo gal-zoom" style="aspect-ratio:${p.w}/${p.h};" ${zoom(i + 1)}><img data-gal="${item.id}" data-which="${i}" alt="${alt(i + 1)}" decoding="async"></button>`
+      : `<div class="doc-photo ${["tB","tC","tE","tF"][i%4]}">[ landscape photo placeholder — ${d.h} ]</div>`;
+    return `
+    <div class="doc-row">
+      ${photo}
+      <div class="doc-text"><h4>${d.h}</h4><p>${d.t}</p></div>
+    </div>`;
+  }).join("");
+  const linkRow = linkRowHTML(item);
+  /* attachments, e.g. the hackathon submission PDF (the files themselves are in PROJECT_FILES) */
+  const fileRows = (item.files || []).filter(f => (window.PROJECT_FILES || {})[f.id]).map(f => {
+    const file = window.PROJECT_FILES[f.id];
+    const kind = file.type === "application/pdf" ? "PDF" : "FILE";
+    return `
+    <div class="file-row">
+      <button type="button" class="file-chip" data-file="${f.id}" aria-label="Open ${attr(f.label)} (${kind}) in a new tab">
+        <span class="file-ico">${kind}</span>
+        <span class="file-txt"><b>${f.label}</b><small>${file.name} · ${Math.round(file.size / 1024)} KB</small></span>
+        <span class="file-go">Open ↗</span>
+      </button>
+      <button type="button" class="file-dl" data-file="${f.id}" data-action="download" aria-label="Download ${attr(file.name)}">⤓ Download</button>
+    </div>`;
+  }).join("");
+  /* top of the popup: the project's cover picture if it has one, otherwise the video placeholder */
+  const hero = set
+    ? `<button type="button" class="proj-hero gal-zoom" ${zoom(0)}><img data-gal="${item.id}" data-which="cover" alt="${alt(0)}"></button>`
+    : `<div class="video-ph">
+      <button class="big-play" aria-label="Play video placeholder">▶</button>
+      <span class="vid-note">[ landscape video placeholder — embed here ]</span>
+    </div>`;
+  return `
+    ${hero}
+    <div class="modal-title-row">
+      <h3>${item.title}</h3>
+      <div class="modal-meta"><span class="cat-badge">${item.category}</span>${when(item) ? `<span>${when(item)}</span>` : ""}${item.dur ? `<span>· ${item.dur}</span>` : ""}</div>
+    </div>
+    <p class="modal-summary">${item.tagline || item.summary || ""}</p>
+    ${(item.roles || []).length ? `<div class="modal-roles"><span>My role:</span>${item.roles.map(r => `<span class="cat-badge">${r}</span>`).join("")}</div>` : ""}
+    ${linkRow}
+    ${fileRows}
+    <div class="doc-divider">Documentation</div>
+    ${docRows}`;
+}
+
+/* ============================================================
+   ATTACHED FILES — kept in window.PROJECT_FILES (a <script> at the bottom of this file)
+   as { id: { name, type, size, data: base64 } } (or url: "assets/files/..." in place of data,
+   when the file is hosted next to the page). "Open" shows the file in a new browser tab;
+   "Download" saves it (also used when the browser blocks the new tab).
+   ============================================================ */
+const fileUrls = {};
+function fileUrl(id){
+  const f = (window.PROJECT_FILES || {})[id];
+  if(!f) return null;
+  if(f.url) return f.url;            /* hosted copy: the file sits in assets/files */
+  if(!fileUrls[id]){
+    const bin = atob(f.data), bytes = new Uint8Array(bin.length);
+    for(let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    fileUrls[id] = URL.createObjectURL(new Blob([bytes], { type: f.type }));
+  }
+  return fileUrls[id];
+}
+function downloadFile(id){
+  const url = fileUrl(id);
+  if(!url) return;
+  const a = document.createElement("a");
+  a.href = url; a.download = window.PROJECT_FILES[id].name;
+  document.body.append(a); a.click(); a.remove();
+}
+function openFile(id){
+  const url = fileUrl(id);
+  if(!url) return;
+  const tab = window.open(url, "_blank");
+  if(tab) tab.opener = null;
+  else downloadFile(id);
+}
+modalBody.addEventListener("click", e => {
+  const btn = e.target.closest("[data-file]");
+  if(!btn) return;
+  (btn.dataset.action === "download" ? downloadFile : openFile)(btn.dataset.file);
+});
+
+function galleryModalHTML(item){
+  const set = galleryPhotos(item.id);
+  if(set){
+    const alt = i => attr((item.photos || [])[i] || item.title);
+    /* every photo is a button that opens the full-screen viewer at that photo (data-lb = its position) */
+    const zoom = i => `data-event="${item.id}" data-lb="${i}" aria-label="View full screen: ${alt(i)}"`;
+    const more = set.more.map((p, i) =>
+      `<button type="button" class="gm-photo gal-zoom" data-ar="${(p.w / p.h).toFixed(4)}" ${zoom(i + 1)}><img data-gal="${item.id}" data-which="${i}" alt="${alt(i + 1)}" decoding="async"></button>`).join("");
+    return `
+    <button type="button" class="gal-hero has-photo gal-zoom" ${zoom(0)}><img data-gal="${item.id}" data-which="cover" alt="${alt(0)}"></button>
+    <div class="modal-title-row">
+      <h3>${item.title}</h3>
+      <div class="modal-meta"><span class="cat-badge">${item.category}</span>${when(item) ? `<span>${when(item)}</span>` : ""}</div>
+    </div>
+    <p class="modal-summary">${item.summary}</p>
+    ${linkRowHTML(item)}
+    ${more ? `<div class="doc-divider">More photos</div><div class="gal-more"${item.rows ? ` data-rows="${item.rows.join(",")}"` : ""}>${more}</div>` : ""}`;
+  }
+  /* no pictures yet: placeholders */
+  return `
+    <div class="gal-hero ${item.thumb}">[ 1:1 photo placeholder — enlarged from thumbnail ]</div>
+    <div class="modal-title-row">
+      <h3>${item.title}</h3>
+      <div class="modal-meta"><span class="cat-badge">${item.category}</span><span>${when(item)}</span></div>
+    </div>
+    <p class="modal-summary">${item.summary}</p>
+    ${linkRowHTML(item)}
+    <div class="doc-divider">More photos</div>
+    <div class="gal-extra">
+      <div class="x-photo land ${item.thumb === "tB" ? "tE" : "tB"}">[ landscape photo placeholder ]</div>
+      <div class="x-photo port ${item.thumb === "tF" ? "tC" : "tF"}">[ portrait photo placeholder ]</div>
+    </div>`;
+}
+
+function certModalHTML(c){
+  const pic = certImage(c.id, "full")
+    ? `<img class="cert-full" data-cert="${c.id}" data-size="full" alt="${c.title}: certificate from ${c.org}">`
+    : certPlaceholder(c, true);
+  /* only the rows that have a value are shown */
+  const rows = [
+    ["Category", c.category],
+    ["Field", c.field],
+    ["Issuing organization", c.org],
+    ["Credential ID", c.credId],
+    ["Expiration", c.expiry],
+    ["Skills", c.skills]
+  ].filter(([, value]) => value)
+   .map(([label, value]) => `<div class="cred-row"><span>${label}</span><b>${value}</b></div>`).join("");
+  const verify = c.verify
+    ? `<p class="cert-verify">→ <a href="${c.verify}" target="_blank" rel="noopener noreferrer">Verify credential ↗</a><small>${new URL(c.verify).host}</small></p>`
+    : "";
+  return `
+    <figure class="cert-view">${pic}</figure>
+    <div class="modal-title-row">
+      <h3>${c.title}</h3>
+      <div class="modal-meta"><span class="cat-badge">${c.category}</span><span class="cat-badge">${c.field}</span>${issuedText(c) ? `<span>${issuedText(c)}</span>` : ""}</div>
+    </div>
+    <p class="modal-summary">${c.desc}</p>
+    <div class="cert-detail">${rows}</div>
+    ${verify}`;
+}
+
+/* ============================================================
+   FOOTER — live local time + rotating quotes
+   ============================================================ */
+(function footerExtras(){
+  const t = document.getElementById("ftTime");
+  if(t){
+    const tick = ()=> t.textContent = new Date().toLocaleTimeString();
+    tick(); setInterval(tick, 1000);
+  }
+  const q = document.getElementById("ftQuote");
+  if(q){
+    const QUOTES = [
+      `"To live is to be kinder each day"`,
+      `"Time to mix drinks and change lives."`,
+      `"Lau was here."`,
+      `"Cogito, ergo sum."`
+    ];
+    let qi = 0;
+    setInterval(()=>{ qi = (qi+1) % QUOTES.length; q.textContent = QUOTES[qi]; }, 6000);
+  }
+})();
+
+document.addEventListener("click", e => {
+  const card = e.target.closest(".yt-card");
+  if(!card) return;
+  const {kind, id} = card.dataset;
+  if(kind === "project"){
+    const item = PROJECTS.find(p=>p.id===id);
+    openModal(projectModalHTML(item), "project_" + id + (item.dur ? ".mp4" : ".jpg"));
+    fillGalleryImages(modalBody);
+    fillAssets(modalBody);
+  } else if(kind === "gallery"){
+    const item = GALLERY.find(g=>g.id===id);
+    openModal(galleryModalHTML(item), "gallery_" + id + ".jpg");
+    fillGalleryImages(modalBody);
+    fillAssets(modalBody);
+    layoutPhotoRows(modalBody.querySelector(".gal-more"));
+  } else if(kind === "cert"){
+    const c = CERTS.find(x=>x.id===id);
+    openModal(certModalHTML(c), "certificate_" + id + ".pdf");
+    fillCertImages(modalBody);
+  }
+});
+</script>
+<!-- ============ CERTIFICATE IMAGES ============
+     Kept at the very end so the code above stays easy to read.
+     One entry per certificate id in CERTS: "thumb" is the small picture on the shelf,
+     "full" is the large one in the popup (WebP files in assets/certificates). -->
+<script>
+window.CERT_IMAGES = {
+"ms-azure-fundamentals": { thumb: "assets/certificates/thumbs/ms-azure-fundamentals.webp", full: "assets/certificates/ms-azure-fundamentals.webp" },
+"certiport-its-networking": { thumb: "assets/certificates/thumbs/certiport-its-networking.webp", full: "assets/certificates/certiport-its-networking.webp" },
+"comptia-itf": { thumb: "assets/certificates/thumbs/comptia-itf.webp", full: "assets/certificates/comptia-itf.webp" },
+"lss-yellow-belt": { thumb: "assets/certificates/thumbs/lss-yellow-belt.webp", full: "assets/certificates/lss-yellow-belt.webp" },
+"lss-white-belt": { thumb: "assets/certificates/thumbs/lss-white-belt.webp", full: "assets/certificates/lss-white-belt.webp" },
+"udacity-aws-ai-programmer": { thumb: "assets/certificates/thumbs/udacity-aws-ai-programmer.webp", full: "assets/certificates/udacity-aws-ai-programmer.webp" },
+"udacity-aws-ai-challenge": { thumb: "assets/certificates/thumbs/udacity-aws-ai-challenge.webp", full: "assets/certificates/udacity-aws-ai-challenge.webp" },
+"google-networking": { thumb: "assets/certificates/thumbs/google-networking.webp", full: "assets/certificates/google-networking.webp" },
+"google-project-mgmt": { thumb: "assets/certificates/thumbs/google-project-mgmt.webp", full: "assets/certificates/google-project-mgmt.webp" },
+"google-tech-support": { thumb: "assets/certificates/thumbs/google-tech-support.webp", full: "assets/certificates/google-tech-support.webp" },
+"nasa-open-science-101": { thumb: "assets/certificates/thumbs/nasa-open-science-101.webp", full: "assets/certificates/nasa-open-science-101.webp" },
+"nasa-open-science-essentials": { thumb: "assets/certificates/thumbs/nasa-open-science-essentials.webp", full: "assets/certificates/nasa-open-science-essentials.webp" },
+"cisco-js-essentials-1": { thumb: "assets/certificates/thumbs/cisco-js-essentials-1.webp", full: "assets/certificates/cisco-js-essentials-1.webp" },
+"canva-whole-class-webinar": { thumb: "assets/certificates/thumbs/canva-whole-class-webinar.webp", full: "assets/certificates/canva-whole-class-webinar.webp" },
+"canva-ai-classroom": { thumb: "assets/certificates/thumbs/canva-ai-classroom.webp", full: "assets/certificates/canva-ai-classroom.webp" },
+"canva-teacher-essentials": { thumb: "assets/certificates/thumbs/canva-teacher-essentials.webp", full: "assets/certificates/canva-teacher-essentials.webp" },
+"canva-essentials": { thumb: "assets/certificates/thumbs/canva-essentials.webp", full: "assets/certificates/canva-essentials.webp" },
+"canva-graphic-design": { thumb: "assets/certificates/thumbs/canva-graphic-design.webp", full: "assets/certificates/canva-graphic-design.webp" },
+"dict-frontier-ai": { thumb: "assets/certificates/thumbs/dict-frontier-ai.webp", full: "assets/certificates/dict-frontier-ai.webp" },
+"dict-vc-webinar": { thumb: "assets/certificates/thumbs/dict-vc-webinar.webp", full: "assets/certificates/dict-vc-webinar.webp" },
+"dict-best-mobile-app": { thumb: "assets/certificates/thumbs/dict-best-mobile-app.webp", full: "assets/certificates/dict-best-mobile-app.webp" },
+"dict-mobile-dev": { thumb: "assets/certificates/thumbs/dict-mobile-dev.webp", full: "assets/certificates/dict-mobile-dev.webp" },
+"dict-basic-web": { thumb: "assets/certificates/thumbs/dict-basic-web.webp", full: "assets/certificates/dict-basic-web.webp" },
+"dict-cyber-hygiene": { thumb: "assets/certificates/thumbs/dict-cyber-hygiene.webp", full: "assets/certificates/dict-cyber-hygiene.webp" },
+"dict-data-privacy": { thumb: "assets/certificates/thumbs/dict-data-privacy.webp", full: "assets/certificates/dict-data-privacy.webp" },
+"globe-sm-internship": { thumb: "assets/certificates/thumbs/globe-sm-internship.webp", full: "assets/certificates/globe-sm-internship.webp" },
+"globe-sm-101": { thumb: "assets/certificates/thumbs/globe-sm-101.webp", full: "assets/certificates/globe-sm-101.webp" },
+"samsung-trailblazing": { thumb: "assets/certificates/thumbs/samsung-trailblazing.webp", full: "assets/certificates/samsung-trailblazing.webp" },
+"samsung-ambassadorship": { thumb: "assets/certificates/thumbs/samsung-ambassadorship.webp", full: "assets/certificates/samsung-ambassadorship.webp" },
+"nu-deans-list-2025-t2": { thumb: "assets/certificates/thumbs/nu-deans-list-2025-t2.webp", full: "assets/certificates/nu-deans-list-2025-t2.webp" },
+"nu-deans-list-2024-t1": { thumb: "assets/certificates/thumbs/nu-deans-list-2024-t1.webp", full: "assets/certificates/nu-deans-list-2024-t1.webp" },
+"nu-deans-list-2024-t3": { thumb: "assets/certificates/thumbs/nu-deans-list-2024-t3.webp", full: "assets/certificates/nu-deans-list-2024-t3.webp" },
+"nu-deans-list-2024-t2": { thumb: "assets/certificates/thumbs/nu-deans-list-2024-t2.webp", full: "assets/certificates/nu-deans-list-2024-t2.webp" },
+"hau-resource-speaker": { thumb: "assets/certificates/thumbs/hau-resource-speaker.webp", full: "assets/certificates/hau-resource-speaker.webp" },
+"hau-cybersec-conference": { thumb: "assets/certificates/thumbs/hau-cybersec-conference.webp", full: "assets/certificates/hau-cybersec-conference.webp" },
+"hau-shs-diploma": { thumb: "assets/certificates/thumbs/hau-shs-diploma.webp", full: "assets/certificates/hau-shs-diploma.webp" },
+"hau-high-honors-2023-s2": { thumb: "assets/certificates/thumbs/hau-high-honors-2023-s2.webp", full: "assets/certificates/hau-high-honors-2023-s2.webp" },
+"hau-honors-2022-s1": { thumb: "assets/certificates/thumbs/hau-honors-2022-s1.webp", full: "assets/certificates/hau-honors-2022-s1.webp" },
+"hau-honors-2022-s2": { thumb: "assets/certificates/thumbs/hau-honors-2022-s2.webp", full: "assets/certificates/hau-honors-2022-s2.webp" },
+"hau-honors-2021-s1": { thumb: "assets/certificates/thumbs/hau-honors-2021-s1.webp", full: "assets/certificates/hau-honors-2021-s1.webp" },
+"hau-jhs-completion": { thumb: "assets/certificates/thumbs/hau-jhs-completion.webp", full: "assets/certificates/hau-jhs-completion.webp" },
+"tesda-computer-networks": { thumb: "assets/certificates/thumbs/tesda-computer-networks.webp", full: "assets/certificates/tesda-computer-networks.webp" },
+"tesda-computer-servers": { thumb: "assets/certificates/thumbs/tesda-computer-servers.webp", full: "assets/certificates/tesda-computer-servers.webp" },
+"tesda-installing": { thumb: "assets/certificates/thumbs/tesda-installing.webp", full: "assets/certificates/tesda-installing.webp" },
+"tesda-maintaining": { thumb: "assets/certificates/thumbs/tesda-maintaining.webp", full: "assets/certificates/tesda-maintaining.webp" },
+"tesda-intro-css": { thumb: "assets/certificates/thumbs/tesda-intro-css.webp", full: "assets/certificates/tesda-intro-css.webp" }
+};
+</script>
+<!-- ============ GALLERY IMAGES ============
+     Files in assets/gallery/<id>/. One entry per gallery id in GALLERY:
+     "thumb" is the card picture, "cover" the square at the top of the popup, "full" the whole
+     cover photo for the full-screen viewer (only when the square is a crop), and "more" the other
+     photos in order (w and h are their size, so they keep their shape). -->
+<script>
+window.GALLERY_IMAGES = {
+"art-in-the-park-2026": {
+  thumb: "assets/gallery/art-in-the-park-2026/thumb.webp",
+  cover: "assets/gallery/art-in-the-park-2026/cover.webp",
+  more: [
+    { w: 800, h: 1067, src: "assets/gallery/art-in-the-park-2026/photo-01.webp" },
+    { w: 1280, h: 1280, src: "assets/gallery/art-in-the-park-2026/photo-02.webp" },
+    { w: 800, h: 1067, src: "assets/gallery/art-in-the-park-2026/photo-03.webp" },
+    { w: 800, h: 1000, src: "assets/gallery/art-in-the-park-2026/photo-04.webp" },
+    { w: 1280, h: 720, src: "assets/gallery/art-in-the-park-2026/photo-05.webp" }
+  ]
+},
+"galaxy-campus-batch-2-graduation": {
+  thumb: "assets/gallery/galaxy-campus-batch-2-graduation/thumb.webp",
+  cover: "assets/gallery/galaxy-campus-batch-2-graduation/cover.webp",
+  full: "assets/gallery/galaxy-campus-batch-2-graduation/full.webp",
+  more: [
+    { w: 1280, h: 850, src: "assets/gallery/galaxy-campus-batch-2-graduation/photo-01.webp" },
+    { w: 1280, h: 1220, src: "assets/gallery/galaxy-campus-batch-2-graduation/photo-02.webp" },
+    { w: 1280, h: 1263, src: "assets/gallery/galaxy-campus-batch-2-graduation/photo-03.webp" },
+    { w: 1280, h: 1280, src: "assets/gallery/galaxy-campus-batch-2-graduation/photo-04.webp" },
+    { w: 1236, h: 1280, src: "assets/gallery/galaxy-campus-batch-2-graduation/photo-05.webp" },
+    { w: 1280, h: 1280, src: "assets/gallery/galaxy-campus-batch-2-graduation/photo-06.webp" }
+  ]
+},
+"galaxy-campus-connect-vietnam": {
+  thumb: "assets/gallery/galaxy-campus-connect-vietnam/thumb.webp",
+  cover: "assets/gallery/galaxy-campus-connect-vietnam/cover.webp",
+  full: "assets/gallery/galaxy-campus-connect-vietnam/full.webp",
+  more: [
+    { w: 1280, h: 853, src: "assets/gallery/galaxy-campus-connect-vietnam/photo-01.webp" },
+    { w: 1280, h: 737, src: "assets/gallery/galaxy-campus-connect-vietnam/photo-02.webp" },
+    { w: 1280, h: 853, src: "assets/gallery/galaxy-campus-connect-vietnam/photo-03.webp" },
+    { w: 1280, h: 1280, src: "assets/gallery/galaxy-campus-connect-vietnam/photo-04.webp" },
+    { w: 1280, h: 853, src: "assets/gallery/galaxy-campus-connect-vietnam/photo-05.webp" },
+    { w: 1280, h: 853, src: "assets/gallery/galaxy-campus-connect-vietnam/photo-06.webp" },
+    { w: 1280, h: 853, src: "assets/gallery/galaxy-campus-connect-vietnam/photo-07.webp" },
+    { w: 1280, h: 853, src: "assets/gallery/galaxy-campus-connect-vietnam/photo-08.webp" },
+    { w: 960, h: 1280, src: "assets/gallery/galaxy-campus-connect-vietnam/photo-09.webp" },
+    { w: 1280, h: 724, src: "assets/gallery/galaxy-campus-connect-vietnam/photo-10.webp" },
+    { w: 1280, h: 960, src: "assets/gallery/galaxy-campus-connect-vietnam/photo-11.webp" },
+    { w: 1280, h: 721, src: "assets/gallery/galaxy-campus-connect-vietnam/photo-12.webp" },
+    { w: 1280, h: 721, src: "assets/gallery/galaxy-campus-connect-vietnam/photo-13.webp" }
+  ]
+},
+"samsung-digital-city-tour": {
+  thumb: "assets/gallery/samsung-digital-city-tour/thumb.webp",
+  cover: "assets/gallery/samsung-digital-city-tour/cover.webp",
+  more: [
+    { w: 1280, h: 854, src: "assets/gallery/samsung-digital-city-tour/photo-01.webp" },
+    { w: 800, h: 1066, src: "assets/gallery/samsung-digital-city-tour/photo-02.webp" },
+    { w: 800, h: 1066, src: "assets/gallery/samsung-digital-city-tour/photo-03.webp" },
+    { w: 1280, h: 1280, src: "assets/gallery/samsung-digital-city-tour/photo-04.webp" },
+    { w: 1280, h: 1280, src: "assets/gallery/samsung-digital-city-tour/photo-05.webp" },
+    { w: 1280, h: 1280, src: "assets/gallery/samsung-digital-city-tour/photo-06.webp" },
+    { w: 960, h: 1280, src: "assets/gallery/samsung-digital-city-tour/photo-07.webp" }
+  ]
+},
+"galaxy-campus-batch-2-kickoff": {
+  thumb: "assets/gallery/galaxy-campus-batch-2-kickoff/thumb.webp",
+  cover: "assets/gallery/galaxy-campus-batch-2-kickoff/cover.webp",
+  full: "assets/gallery/galaxy-campus-batch-2-kickoff/full.webp",
+  more: [
+    { w: 1280, h: 853, src: "assets/gallery/galaxy-campus-batch-2-kickoff/photo-01.webp" },
+    { w: 1280, h: 960, src: "assets/gallery/galaxy-campus-batch-2-kickoff/photo-02.webp" },
+    { w: 1215, h: 1215, src: "assets/gallery/galaxy-campus-batch-2-kickoff/photo-03.webp" },
+    { w: 960, h: 1280, src: "assets/gallery/galaxy-campus-batch-2-kickoff/photo-04.webp" },
+    { w: 1280, h: 853, src: "assets/gallery/galaxy-campus-batch-2-kickoff/photo-05.webp" },
+    { w: 1280, h: 853, src: "assets/gallery/galaxy-campus-batch-2-kickoff/photo-06.webp" },
+    { w: 1280, h: 960, src: "assets/gallery/galaxy-campus-batch-2-kickoff/photo-07.webp" },
+    { w: 1280, h: 720, src: "assets/gallery/galaxy-campus-batch-2-kickoff/photo-08.webp" },
+    { w: 1280, h: 852, src: "assets/gallery/galaxy-campus-batch-2-kickoff/photo-09.webp" },
+    { w: 1280, h: 721, src: "assets/gallery/galaxy-campus-batch-2-kickoff/photo-10.webp" },
+    { w: 1280, h: 720, src: "assets/gallery/galaxy-campus-batch-2-kickoff/photo-11.webp" },
+    { w: 960, h: 1280, src: "assets/gallery/galaxy-campus-batch-2-kickoff/photo-12.webp" },
+    { w: 1280, h: 852, src: "assets/gallery/galaxy-campus-batch-2-kickoff/photo-13.webp" }
+  ]
+}
+};
+</script>
+<!-- ============ PROJECT IMAGES ============
+     Files in assets/projects/<id>/. One entry per project id in PROJECTS that has real pictures: "thumb" is the 16:9 card picture,
+     "cover" the top of the popup, "full" the whole cover for the full-screen viewer, and "more" the
+     documentation photos in the order of the documentation rows (w and h are their size). -->
+<script>
+window.PROJECT_IMAGES = {
+"galaxy-campus-creation-lab": {
+  thumb: "assets/projects/galaxy-campus-creation-lab/thumb.webp",
+  cover: "assets/projects/galaxy-campus-creation-lab/cover.webp",
+  full: "assets/projects/galaxy-campus-creation-lab/full.webp",
+  more: [
+    { w: 1206, h: 1075, src: "assets/projects/galaxy-campus-creation-lab/photo-01.webp" },
+    { w: 1280, h: 479, src: "assets/projects/galaxy-campus-creation-lab/photo-02.webp" },
+    { w: 1280, h: 725, src: "assets/projects/galaxy-campus-creation-lab/photo-03.webp" }
+  ]
+},
+"monsoon-ai": {
+  thumb: "assets/projects/monsoon-ai/thumb.webp",
+  cover: "assets/projects/monsoon-ai/cover.webp",
+  full: "assets/projects/monsoon-ai/full.webp",
+  more: [
+    { w: 1280, h: 720, src: "assets/projects/monsoon-ai/photo-01.webp" },
+    { w: 1280, h: 720, src: "assets/projects/monsoon-ai/photo-02.webp" },
+    { w: 1280, h: 720, src: "assets/projects/monsoon-ai/photo-03.webp" },
+    { w: 1280, h: 720, src: "assets/projects/monsoon-ai/photo-04.webp" },
+    { w: 1280, h: 720, src: "assets/projects/monsoon-ai/photo-05.webp" },
+    { w: 1280, h: 720, src: "assets/projects/monsoon-ai/photo-06.webp" },
+    { w: 1280, h: 685, src: "assets/projects/monsoon-ai/photo-07.webp" }
+  ]
+},
+"qr-code-scanner": {
+  thumb: "assets/projects/qr-code-scanner/thumb.webp",
+  cover: "assets/projects/qr-code-scanner/cover.webp",
+  full: "assets/projects/qr-code-scanner/full.webp",
+  more: [
+    { w: 1280, h: 800, src: "assets/projects/qr-code-scanner/photo-01.webp" },
+    { w: 1280, h: 686, src: "assets/projects/qr-code-scanner/photo-02.webp" }
+  ]
+},
+"roadrunner": {
+  thumb: "assets/projects/roadrunner/thumb.webp",
+  cover: "assets/projects/roadrunner/cover.webp",
+  full: "assets/projects/roadrunner/full.webp",
+  more: [
+    { w: 1280, h: 654, src: "assets/projects/roadrunner/photo-01.webp" },
+    { w: 1280, h: 490, src: "assets/projects/roadrunner/photo-02.webp" },
+    { w: 1280, h: 629, src: "assets/projects/roadrunner/photo-03.webp" },
+    { w: 1280, h: 653, src: "assets/projects/roadrunner/photo-04.webp" },
+    { w: 1280, h: 629, src: "assets/projects/roadrunner/photo-05.webp" },
+    { w: 1280, h: 626, src: "assets/projects/roadrunner/photo-06.webp" },
+    { w: 1280, h: 631, src: "assets/projects/roadrunner/photo-07.webp" },
+    { w: 615, h: 868, src: "assets/projects/roadrunner/photo-08.webp" },
+    { w: 615, h: 594, src: "assets/projects/roadrunner/photo-09.webp" },
+    { w: 608, h: 831, src: "assets/projects/roadrunner/photo-10.webp" },
+    { w: 1280, h: 626, src: "assets/projects/roadrunner/photo-11.webp" },
+    { w: 1280, h: 626, src: "assets/projects/roadrunner/photo-12.webp" },
+    { w: 1280, h: 630, src: "assets/projects/roadrunner/photo-13.webp" }
+  ]
+},
+"sign-up-plus": {
+  thumb: "assets/projects/sign-up-plus/thumb.webp",
+  cover: "assets/projects/sign-up-plus/cover.webp",
+  full: "assets/projects/sign-up-plus/full.webp",
+  more: [
+    { w: 1280, h: 529, src: "assets/projects/sign-up-plus/photo-01.webp" },
+    { w: 1280, h: 633, src: "assets/projects/sign-up-plus/photo-02.webp" },
+    { w: 1280, h: 635, src: "assets/projects/sign-up-plus/photo-03.webp" },
+    { w: 1280, h: 630, src: "assets/projects/sign-up-plus/photo-04.webp" },
+    { w: 1280, h: 636, src: "assets/projects/sign-up-plus/photo-05.webp" },
+    { w: 1280, h: 638, src: "assets/projects/sign-up-plus/photo-06.webp" }
+  ]
+}
+};
+</script>
+<!-- ============ PROJECT FILES ============
+     Attachments for projects (e.g. a hackathon submission PDF), kept in assets/files.
+     A project lists them in its files:[{ id, label }]; the popup shows Open / Download buttons. -->
+<script>
+window.PROJECT_FILES = {
+"monsoon-ai-prelim": {
+  name: "Monsoon_MonsoonAI_PreliminaryRound.pdf",
+  type: "application/pdf",
+  size: 309036,
+  url: "assets/files/Monsoon_MonsoonAI_PreliminaryRound.pdf"
+}
+};
+</script>
+</body>
+</html>
